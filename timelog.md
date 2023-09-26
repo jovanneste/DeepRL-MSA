@@ -1,8 +1,8 @@
 # Timelog
 
-* Using deep reinforcement learning to solve the multiple sequence alignment problem.
+* Using deep reinforcement learning to solve the multiple sequence alignment problem
 * Joachim Vanneste
-* 2460800V
+* 2460800v
 * Kevin Bryson
 
 
