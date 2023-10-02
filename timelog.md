@@ -14,3 +14,20 @@
 ### 26 Sep 2023
 * *0.5 hours* Set-up git repository 
 * *3 hours* Research into iterative alignment and probabilistic methods  
+
+### 27 Sep 2023
+* *1 hour* Plan for project
+* *2 hours* Plan for meeting
+
+### 28 Sep 2023
+* *1 hour* Meeting
+
+### 29 Sep 2023
+
+### 30 Sep 2023
+
+### 01 Oct 2023
+* *4 hours* Reseach for literature review
+
+### 02 Oct 2023
+* *5 hours* Reseach for literature review
