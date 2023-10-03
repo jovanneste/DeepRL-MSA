@@ -31,3 +31,6 @@
 
 ### 02 Oct 2023
 * *5 hours* Reseach for literature review
+
+### 02 Oct 2023
+* *5 hours* Start writing literature review 
