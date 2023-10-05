@@ -18,7 +18,3 @@ def score(msa):
                     if char_j == char_k:
                         score += 1
     return score
-
-
-sequences = generate_sequence(3, 5)
-print(score(sequences))
