@@ -15,6 +15,6 @@ def generate_sequence(n_sequences, length, mutation_prob=0.2, del_prob=0.2):
             continue
         else:
             sequences.append(seq_del)
-    
+
     padded_array = np.array([row + ['_'] * (length - len(row)) for row in np.asarray(sequences, dtype=object)])
     return padded_array

@@ -68,15 +68,7 @@ class DQN(nn.Module):
         return tf.keras.Model(inputs=input_layer, outputs=[x_output, y_output])
 
     def forward(self, state):
-        x_probs, y_probs = self.model.predict(np.expand_dims(state, axis=0))
-        x = np.random.choice(range(self.m), p=x_probs[0])
-        y = np.random.choice(range(self.n), p=y_probs[0])
-        return x, y
-
-    def train(self, state, x_target, y_target):
-        x_target = tf.keras.utils.to_categorical(x_target, num_classes=self.m)
-        y_target = tf.keras.utils.to_categorical(y_target, num_classes=self.n)
-        self.model.train_on_batch(np.expand_dims(state, axis=0), [x_target, y_target])
+        pass
 
 
 
@@ -103,10 +95,12 @@ def performAction(state, action):
 # input_shape = (2, 4)  # Adjust the shape based on your input
 # m, n = 2, 4  # Adjust these values based on your grid dimensions
 
+n_sequences = 5
+length = 5
 
+s = generate_sequence(n_sequences, length)
 
-s = generate_sequence(2,4)
-model = DQN(2, 4)
+# model = DQN(2, 4)
 print(s)
 print(score(s))
 # model.forward(s)
