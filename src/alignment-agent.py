@@ -102,15 +102,14 @@ def performAction(state, action):
 # # Create an instance of the DQN class
 # input_shape = (2, 4)  # Adjust the shape based on your input
 # m, n = 2, 4  # Adjust these values based on your grid dimensions
-# dqn = DQN(input_shape, m, n)
 
 
-s = generate_sequence(4,4)
+
+s = generate_sequence(2,4)
+model = DQN(2, 4)
 print(s)
-print(char_to_int(s))
-
-
-
+print(score(s))
+# model.forward(s)
 
 
 # Now, you can use numerical_state as input to your DQN
