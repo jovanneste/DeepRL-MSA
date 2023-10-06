@@ -28,8 +28,12 @@ def score(msa):
     return score
 
 
-Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
+def char_to_int(sequence):
+    char_to_number = {chr(65 + i): i + 1 for i in range(26) if chr(65 + i) != '_'}
+    return np.array([[char_to_number[c] for c in row] for row in sequence])
 
+
+Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
 class ReplayMemory(object):
     def __init__(self, capacity):
         self.memory = []
@@ -95,29 +99,25 @@ def performAction(state, action):
 
 
 
-# Create an instance of the DQN class
-input_shape = (2, 4)  # Adjust the shape based on your input
-m, n = 2, 4  # Adjust these values based on your grid dimensions
-dqn = DQN(input_shape, m, n)
+# # Create an instance of the DQN class
+# input_shape = (2, 4)  # Adjust the shape based on your input
+# m, n = 2, 4  # Adjust these values based on your grid dimensions
+# dqn = DQN(input_shape, m, n)
+
+
+s = generate_sequence(4,4)
+print(s)
+print(char_to_int(s))
 
 
 
 
-
-# Define a mapping from characters to integers
-char_to_int = {'A': 0, 'M': 1, 'T': 2}
-
-# Define the grid state as a string
-grid_state = [['A', 'M', 'T', 'T'], ['A', 'M', 'T', 'T']]
-
-# Convert the grid state to a numerical representation
-numerical_state = np.array([[char_to_int[c] for c in row] for row in grid_state])
 
 # Now, you can use numerical_state as input to your DQN
-x, y = dqn.forward(numerical_state)
+# x, y = dqn.forward(numerical_state)
 
 
 
 
 
-print(x,y)
+# print(x,y)
