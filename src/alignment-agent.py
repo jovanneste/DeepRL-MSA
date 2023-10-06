@@ -1,5 +1,12 @@
 from generator import *
 from collections import namedtuple
+import torch
+import tensorflow as tf
+from tensorflow.keras.layers import Dense, Flatten, Input
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+
 
 def score(msa):
     num_sequences = len(msa)
@@ -40,9 +47,33 @@ class ReplayMemory(object):
         self.memory = []
     
 
-class DQN():
-    pass
-    # take 2d array -> x,y posistion 
+class DQN(nn.Module):
+    def __init__(self, input_shape, m, n):
+        super(DQN, self).__init__()
+        self.m = m
+        self.n = n
+        self.model = self.build_model(input_shape)
+
+    def build_model(self, input_shape):
+        input_layer = Input(shape=input_shape)
+        flatten_layer = Flatten()(input_layer)
+        hidden1 = Dense(64, activation='relu')(flatten_layer)
+        hidden2 = Dense(64, activation='relu')(hidden1)
+        x_output = Dense(self.m, activation='softmax')(hidden2)
+        y_output = Dense(self.n, activation='softmax')(hidden2)
+        return tf.keras.Model(inputs=input_layer, outputs=[x_output, y_output])
+
+    def forward(self, state):
+        x_probs, y_probs = self.model.predict(np.expand_dims(state, axis=0))
+        x = np.random.choice(range(self.m), p=x_probs[0])
+        y = np.random.choice(range(self.n), p=y_probs[0])
+        return x, y
+
+    def train(self, state, x_target, y_target):
+        x_target = tf.keras.utils.to_categorical(x_target, num_classes=self.m)
+        y_target = tf.keras.utils.to_categorical(y_target, num_classes=self.n)
+        self.model.train_on_batch(np.expand_dims(state, axis=0), [x_target, y_target])
+
 
 
 def convergence():
@@ -58,3 +89,35 @@ def performAction(state, action):
     pass
     # insert gap 
     # return new_state, reward, done(bool)
+
+
+
+
+
+
+# Create an instance of the DQN class
+input_shape = (2, 4)  # Adjust the shape based on your input
+m, n = 2, 4  # Adjust these values based on your grid dimensions
+dqn = DQN(input_shape, m, n)
+
+
+
+
+
+# Define a mapping from characters to integers
+char_to_int = {'A': 0, 'M': 1, 'T': 2}
+
+# Define the grid state as a string
+grid_state = [['A', 'M', 'T', 'T'], ['A', 'M', 'T', 'T']]
+
+# Convert the grid state to a numerical representation
+numerical_state = np.array([[char_to_int[c] for c in row] for row in grid_state])
+
+# Now, you can use numerical_state as input to your DQN
+x, y = dqn.forward(numerical_state)
+
+
+
+
+
+print(x,y)
