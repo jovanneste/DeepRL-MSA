@@ -12,5 +12,5 @@ def generate_sequence(n_sequences, length, mutation_prob=0.2, del_prob=0.2):
         seq_mut = [i if random.random() > mutation_prob else random.choice(aa) for i in initial_sequence]
         sequences.append([i for i in seq_mut if random.random() > del_prob])
     
-    padded_array = np.array([row + ['_'] * (length - len(row)) for row in np.asarray(sequences)])
+    padded_array = np.array([row + ['_'] * (length - len(row)) for row in np.asarray(sequences, dtype=object)])
     return padded_array

@@ -30,7 +30,7 @@ def score(msa):
 
 def char_to_int(sequence):
     char_to_number = {chr(65 + i): i + 1 for i in range(26) if chr(65 + i) != '_'}
-    return np.array([[char_to_number[c] for c in row] for row in sequence])
+    return np.array([[char_to_number.get(c, '_') for c in row] for row in sequence])
 
 
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
@@ -52,14 +52,14 @@ class ReplayMemory(object):
     
 
 class DQN(nn.Module):
-    def __init__(self, input_shape, m, n):
+    def __init__(self, m, n):
         super(DQN, self).__init__()
         self.m = m
         self.n = n
-        self.model = self.build_model(input_shape)
+        self.model = self.build_model()
 
-    def build_model(self, input_shape):
-        input_layer = Input(shape=input_shape)
+    def build_model(self):
+        input_layer = Input(shape=(self.m, self.n))
         flatten_layer = Flatten()(input_layer)
         hidden1 = Dense(64, activation='relu')(flatten_layer)
         hidden2 = Dense(64, activation='relu')(hidden1)
@@ -107,7 +107,7 @@ def performAction(state, action):
 
 s = generate_sequence(4,4)
 print(s)
-# print(char_to_int(s))
+print(char_to_int(s))
 
 
 
