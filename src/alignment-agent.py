@@ -107,7 +107,7 @@ def performAction(state, action):
 
 s = generate_sequence(4,4)
 print(s)
-print(char_to_int(s))
+# print(char_to_int(s))
 
 
 
