@@ -95,27 +95,3 @@ def action(state, coords):
             row.insert(0, '_')
 
     return np.array(s_list)
-
-
-
-
-# # Create an instance of the DQN class
-# input_shape = (2, 4)  # Adjust the shape based on your input
-# m, n = 2, 4  # Adjust these values based on your grid dimensions
-
-n_sequences = 5
-length = 5
-
-s = generate_sequence(n_sequences, length)
-
-# model.forward(s)
-
-
-# Now, you can use numerical_state as input to your DQN
-# x, y = dqn.forward(numerical_state)
-
-
-
-
-
-# print(x,y)
