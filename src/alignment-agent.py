@@ -80,6 +80,7 @@ def getAction(model, state, eplison):
     pass
     # epsilon decay either random or np.argmax(tf.nn.softmax(model.predict(state).numpy()[0]))
 
+
 def action(state, coords):
     s_list = state.tolist()
     x, y = coords
@@ -90,10 +91,8 @@ def action(state, coords):
         row.append('_')
     else:
         if '_' in row:
-            index = row.index('_')
-            row.pop(index)
+            row.pop(row.index('_'))
             row.insert(0, '_')
-            print(row)
 
     return np.array(s_list)
 
