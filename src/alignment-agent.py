@@ -1,8 +1,10 @@
 from generator import *
 from collections import namedtuple
+import pickle
 import torch
 import tensorflow as tf
 from tensorflow.keras.layers import Dense, Flatten, Input
+from tensorflow.keras.applications.resnet50 import preprocess_input
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
@@ -28,21 +30,21 @@ def score(msa):
     return score
 
 
+def process(data):
+    state = np.stack((data,)*3, axis=-1)  
+    state = tf.image.resize(state, (32, 32))  
+    state = preprocess_input(state)
+    return np.expand_dims(state, axis=0)
 
-def action(state, coords):
-    s_list = state.tolist()
-    x, y = coords
-    row = s_list[y]
 
-    if row[x] == '_':
-        row.pop(x)
-        row.append('_')
+def get_features(state):
+    with open("resnet.pkl", "rb") as file:
+        pretrained_model = pickle.load(file)
+    if pretrained_model:
+        return pretrained_model.predict(process(state))
     else:
-        if '_' in row:
-            row.pop(row.index('_'))
-            row.insert(0, '_')
-
-    return np.array(s_list)
+        print("Model not loaded...")
+        return 0
 
 
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
@@ -92,3 +94,11 @@ def convergence():
 def getAction(model, state, eplison):
     pass
     # epsilon decay either random or np.argmax(tf.nn.softmax(model.predict(state).numpy()[0]))
+
+
+
+s = generate_sequence(5,5)
+s[s=='_']=0
+s = s.astype(int)
+print(s)
+print(np.where(get_features(s)!=0))
