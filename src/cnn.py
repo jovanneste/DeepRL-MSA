@@ -7,6 +7,7 @@ from tensorflow.keras.applications.resnet50 import preprocess_input
 global pretrained_model
 pretrained_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
 with open("resnet.pkl", "wb") as file:
+    print("Saving ResNet model...")
     pickle.dump(pretrained_model, file)
 
 
