@@ -29,7 +29,20 @@ def score(msa):
 
 
 
+def action(state, coords):
+    s_list = state.tolist()
+    x, y = coords
+    row = s_list[y]
 
+    if row[x] == '_':
+        row.pop(x)
+        row.append('_')
+    else:
+        if '_' in row:
+            row.pop(row.index('_'))
+            row.insert(0, '_')
+
+    return np.array(s_list)
 
 
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
@@ -79,19 +92,3 @@ def convergence():
 def getAction(model, state, eplison):
     pass
     # epsilon decay either random or np.argmax(tf.nn.softmax(model.predict(state).numpy()[0]))
-
-
-def action(state, coords):
-    s_list = state.tolist()
-    x, y = coords
-    row = s_list[y]
-
-    if row[x] == '_':
-        row.pop(x)
-        row.append('_')
-    else:
-        if '_' in row:
-            row.pop(row.index('_'))
-            row.insert(0, '_')
-
-    return np.array(s_list)
