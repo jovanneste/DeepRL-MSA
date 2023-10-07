@@ -10,14 +10,11 @@ with open("resnet.pkl", "wb") as file:
     print("Saving ResNet model...")
     pickle.dump(pretrained_model, file)
 
-
 def process(data):
     state = np.stack((data,)*3, axis=-1)  
     state = tf.image.resize(state, (224, 224))  
     state = preprocess_input(state)
     return np.expand_dims(state, axis=0)
-
-
 
 def get_features(state):
     with open("resnet.pkl", "rb") as file:
