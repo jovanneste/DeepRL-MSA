@@ -28,9 +28,8 @@ def score(msa):
     return score
 
 
-def char_to_int(sequence):
-    char_to_number = {chr(65 + i): i + 1 for i in range(26) if chr(65 + i) != '_'}
-    return np.array([[char_to_number.get(c, '_') for c in row] for row in sequence])
+
+
 
 
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
@@ -81,12 +80,22 @@ def getAction(model, state, eplison):
     pass
     # epsilon decay either random or np.argmax(tf.nn.softmax(model.predict(state).numpy()[0]))
 
-def performAction(state, action):
-    pass
-    # insert gap 
-    # return new_state, reward, done(bool)
+def action(state, coords):
+    s_list = state.tolist()
+    x, y = coords
+    row = s_list[y]
 
+    if row[x] == '_':
+        row.pop(x)
+        row.append('_')
+    else:
+        if '_' in row:
+            index = row.index('_')
+            row.pop(index)
+            row.insert(0, '_')
+            print(row)
 
+    return np.array(s_list)
 
 
 
@@ -100,9 +109,6 @@ length = 5
 
 s = generate_sequence(n_sequences, length)
 
-# model = DQN(2, 4)
-print(s)
-print(score(s))
 # model.forward(s)
 
 
