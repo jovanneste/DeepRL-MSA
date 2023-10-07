@@ -1,41 +1,20 @@
 import numpy as np
 import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras import layers
+import pickle
+from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.applications.resnet50 import preprocess_input
 
-tf.random.set_seed(42)
-np.random.seed(42)
-
-class MyCNN:
-    def __init__(self, input_shape):
-        self.model = self.build_model(input_shape)
-        
-    def build_model(self, input_shape):
-        model = keras.Sequential([
-            layers.Input(shape=input_shape),
-            layers.Conv2D(32, kernel_size=(3, 3), activation='relu'),
-            # no max pooling layer for now
-            layers.Flatten(),
-            layers.Dense(128, activation='relu'),
-            layers.Dense(64, activation='relu'),
-            layers.Dense(10, activation='softmax') 
-        ])
-        return model
-    
-    def extract_features(self, input_data):
-        input_data = np.expand_dims(input_data, axis=0) 
-        features = self.model.predict(input_data)
-        return features
+global pretrained_model
+pretrained_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+with open("resnet.pkl", "wb") as file:
+    pickle.dump(pretrained_model, file)
 
 
-if __name__ == "__main__":
-    input_data = np.array([['1', '1', '2', '4'],
-                           ['5', '6', '7', '8'],
-                           ['9', '1', '0', '1']], dtype=np.float32)  
-    
-    input_data = np.reshape(input_data, (1, input_data.shape[0], input_data.shape[1], 1))
-
-
-    cnn = MyCNN(input_shape=input_data.shape)
-    features = cnn.extract_features(input_data)
-    print("Features:", features)
+def get_features(state):
+    with open("resnet.pkl", "rb") as file:
+        pretrained_model = pickle.load(file)
+    state = np.stack((state,)*3, axis=-1)  
+    state = tf.image.resize(state, (224, 224))  
+    state = preprocess_input(state)
+    state = np.expand_dims(state, axis=0)
+    return pretrained_model.predict(state)
