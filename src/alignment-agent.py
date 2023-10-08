@@ -41,7 +41,7 @@ def get_features(state):
     with open("resnet.pkl", "rb") as file:
         pretrained_model = pickle.load(file)
     if pretrained_model:
-        return pretrained_model.predict(process(state))
+        return np.squeeze(pretrained_model.predict(process(state)))
     else:
         print("Model not loaded...")
         return 0
@@ -97,8 +97,10 @@ def getAction(model, state, eplison):
 
 
 
-s = generate_sequence(5,5)
+s = generate_sequence(20,20)
 s[s=='_']=0
 s = s.astype(int)
-print(s)
-print(np.where(get_features(s)!=0))
+features = get_features(s)
+print(features.shape)
+features = np.squeeze(features)
+print(features.shape)

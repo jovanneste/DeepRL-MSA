@@ -1,7 +1,6 @@
 import random
 import numpy as np
 
-
 def char_to_int(sequence):
     char_to_number = {chr(65 + i): i + 1 for i in range(26) if chr(65 + i) != '_'}
     return np.array([[char_to_number.get(c, '_') for c in row] for row in sequence])
