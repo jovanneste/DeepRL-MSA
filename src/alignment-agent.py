@@ -1,6 +1,7 @@
 from generator import *
 from collections import namedtuple
 import pickle
+import tdqm
 import torch
 import tensorflow as tf
 from tensorflow import keras
@@ -63,6 +64,7 @@ def action(state, coords):
 
     return np.array(s_list)
 
+
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
 class ReplayMemory(object):
     def __init__(self, capacity):
@@ -101,18 +103,14 @@ class DQN(nn.Module):
         index = np.argmax(q_values)
         return ((index-1)%5, (index-1)//5)
 
-
-
+    
 def convergence():
     pass
     # way to say time to stop actions
 
     
-EPISODES=100
-epsilon = 0.6
-reduction = epsilon/EPISODES
+
 def epsilonGreedy(model, features):
-    global epsilon, reduction
     if np.random.random() < 1-epsilon:
          action = model.forward(features)
     else:
@@ -122,6 +120,22 @@ def epsilonGreedy(model, features):
         epsilon-=reduction  
     return action
 
+
+def train_alignment_agent(sequences):
+    global epsilon, reduction
+    replay = ReplayMemory()
+    EPISODES=100
+    epsilon = 0.95
+    
+    for episode in tdqm.tqdm(range(EPISODES)):
+        state = sequences
+        replay.clear()
+        reduction = epsilon/EPISODES
+        done = False
+        
+        
+        
+    
 
 
 
