@@ -66,23 +66,22 @@ class ReplayMemory(object):
     
 
 class DQN(nn.Module):
-    def __init__(self, m, n):
+    def __init__(self, input_shape, n_actions):
         super(DQN, self).__init__()
-        self.m = m
-        self.n = n
+        self.input_shape = input_shape
+        self.n_actions = n_actions
         self.model = self.build_model()
 
     def build_model(self):
-        input_layer = Input(shape=(self.m, self.n))
-        flatten_layer = Flatten()(input_layer)
-        hidden1 = Dense(64, activation='relu')(flatten_layer)
-        hidden2 = Dense(64, activation='relu')(hidden1)
-        x_output = Dense(self.m, activation='softmax')(hidden2)
-        y_output = Dense(self.n, activation='softmax')(hidden2)
-        return tf.keras.Model(inputs=input_layer, outputs=[x_output, y_output])
+        model = keras.Sequential([
+            keras.layers.Dense(128, activation='relu', input_shape=self.input_shape),
+            keras.layers.Dense(64, activation='relu'),
+            keras.layers.Dense(self.n_actions, activation='linear')
+        ])
+        return model
 
-    def forward(self, state):
-        pass
+    def forward(self, features):
+        
 
 
 
@@ -97,10 +96,9 @@ def getAction(model, state, eplison):
 
 
 
-s = generate_sequence(20,20)
+
+s = generate_sequence(5,5)
 s[s=='_']=0
 s = s.astype(int)
 features = get_features(s)
-print(features.shape)
-features = np.squeeze(features)
 print(features.shape)
