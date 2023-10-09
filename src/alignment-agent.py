@@ -1,7 +1,7 @@
 from generator import *
 from collections import namedtuple
 import pickle
-import tdqm
+import tqdm
 import torch
 import tensorflow as tf
 from tensorflow import keras
@@ -40,6 +40,8 @@ def process(data):
 
 
 def get_features(state):
+    state[state=='_']=0
+    state = state.astype(int)
     with open("resnet.pkl", "rb") as file:
         pretrained_model = pickle.load(file)
     if pretrained_model:
@@ -49,7 +51,7 @@ def get_features(state):
         return 0
 
     
-def action(state, coords):
+def step(state, coords):
     s_list = state.tolist()
     x, y = coords
     row = s_list[y]
@@ -61,8 +63,11 @@ def action(state, coords):
         if '_' in row:
             row.pop(row.index('_'))
             row.insert(0, '_')
-
-    return np.array(s_list)
+            
+    new_state = np.array(s_list).reshape(state.shape)
+    done = True 
+#    use convergence check
+    return new_state, score(new_state), done
 
 
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
@@ -124,8 +129,9 @@ def epsilonGreedy(model, features):
 def train_alignment_agent(sequences):
     global epsilon, reduction
     replay = ReplayMemory()
-    EPISODES=100
+    EPISODES = 1
     epsilon = 0.95
+    model = DQN((2048,), 25)
     
     for episode in tdqm.tqdm(range(EPISODES)):
         state = sequences
@@ -133,17 +139,19 @@ def train_alignment_agent(sequences):
         reduction = epsilon/EPISODES
         done = False
         
-        
+        while not done:
+            action = epsilonGreedy(model, get_features(state))
+            new_state, reward, done = step(state, action)
+            replay.store_experience(state, action, new_state, reward)
+            state = new_state
+            
+            if done:
+#                update q-network
+                break
         
     
 
 
-
-model = DQN((2048,), 25)
 s = generate_sequence(5,5)
-s[s=='_']=0
-s = s.astype(int)
-features = get_features(s)
-print(features.shape)
-print("-----------------------------------------------")
-print(model.forward(features))
+print(s)
+train_alignment_agent(s)
