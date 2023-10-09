@@ -119,13 +119,9 @@ def epsilonGreedy(model, features):
         action = (np.random.randint(0, 4), np.random.randint(0, 4))
     
     if epsilon>0:
-        epsilon-=reduction
-        
+        epsilon-=reduction  
     return action
 
-def getAction(model, state, eplison):
-    pass
-    # epsilon decay either random or np.argmax(tf.nn.softmax(model.predict(state).numpy()[0]))
 
 
 
