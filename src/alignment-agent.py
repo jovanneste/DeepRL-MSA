@@ -47,6 +47,22 @@ def get_features(state):
         print("Model not loaded...")
         return 0
 
+    
+def action(state, coords):
+    s_list = state.tolist()
+    x, y = coords
+    row = s_list[y]
+
+    if row[x] == '_':
+        row.pop(x)
+        row.append('_')
+    else:
+        if '_' in row:
+            row.pop(row.index('_'))
+            row.insert(0, '_')
+
+    return np.array(s_list)
+
 
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
 class ReplayMemory(object):
@@ -82,8 +98,9 @@ class DQN(nn.Module):
         return model
 
     def forward(self, features):
-        # q-values
-        return self.model.predict(features)
+        q_values = self.model.predict(features)
+        index = np.argmax(q_values)
+        return (index-1)%5, (index-1)//5
 
 
 
