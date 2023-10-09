@@ -3,6 +3,7 @@ from collections import namedtuple
 import pickle
 import torch
 import tensorflow as tf
+from tensorflow import keras
 from tensorflow.keras.layers import Dense, Flatten, Input
 from tensorflow.keras.applications.resnet50 import preprocess_input
 import torch.nn as nn
@@ -41,7 +42,7 @@ def get_features(state):
     with open("resnet.pkl", "rb") as file:
         pretrained_model = pickle.load(file)
     if pretrained_model:
-        return np.squeeze(pretrained_model.predict(process(state)))
+        return np.reshape(np.squeeze(pretrained_model.predict(process(state))), (1,2048))
     else:
         print("Model not loaded...")
         return 0
@@ -81,7 +82,8 @@ class DQN(nn.Module):
         return model
 
     def forward(self, features):
-        
+        # q-values
+        return self.model.predict(features)
 
 
 
@@ -96,9 +98,11 @@ def getAction(model, state, eplison):
 
 
 
-
+model = DQN((2048,), 25)
 s = generate_sequence(5,5)
 s[s=='_']=0
 s = s.astype(int)
 features = get_features(s)
 print(features.shape)
+print("-----------------------------------------------")
+print(model.forward(features))
