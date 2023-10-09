@@ -63,7 +63,6 @@ def action(state, coords):
 
     return np.array(s_list)
 
-
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
 class ReplayMemory(object):
     def __init__(self, capacity):
@@ -100,7 +99,7 @@ class DQN(nn.Module):
     def forward(self, features):
         q_values = self.model.predict(features)
         index = np.argmax(q_values)
-        return (index-1)%5, (index-1)//5
+        return ((index-1)%5, (index-1)//5)
 
 
 
@@ -108,6 +107,21 @@ def convergence():
     pass
     # way to say time to stop actions
 
+    
+EPISODES=100
+epsilon = 0.6
+reduction = epsilon/EPISODES
+def epsilonGreedy(model, features):
+    global epsilon, reduction
+    if np.random.random() < 1-epsilon:
+         action = model.forward(features)
+    else:
+        action = (np.random.randint(0, 4), np.random.randint(0, 4))
+    
+    if epsilon>0:
+        epsilon-=reduction
+        
+    return action
 
 def getAction(model, state, eplison):
     pass
