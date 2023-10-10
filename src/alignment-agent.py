@@ -132,8 +132,17 @@ def epsilonGreedy(model, features):
     return action
 
 
+def optimise_model():
+    transitions = replay.sample(10)
+    batch = Transition(*zip(*transitions))
+    print(batch)
+    
+
+    
+    
+global replay
+replay = ReplayMemory()
 def train_alignment_agent(sequences):
-    replay = ReplayMemory()
     model = DQN((2048,), 25)
     
     for episode in tqdm.tqdm(range(EPISODES)):
@@ -148,8 +157,8 @@ def train_alignment_agent(sequences):
             state = new_state
             
             if done:
+                optimise_model()
                 print("done!!!!!!!!!!")
-#                update q-network
                 break
         
     
