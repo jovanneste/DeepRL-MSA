@@ -132,14 +132,14 @@ def epsilonGreedy(model, features):
     return action
 
 
-optimizer = optim.Adam(dqn_model.parameters(), lr=0.001)
-loss_function = torch.nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+loss_function = nn.MSELoss()
 def optimise_model():
     transitions = replay.sample(1)
     batch = Transition(*zip(*transitions))
-    with tf.GradientTape() as tape:
-       pass
-
+    features = [get_features(state) for state in batch.state]
+    features = torch.tensor(features, dtype=torch.float32)
+    print(features)
     
     
 global replay
