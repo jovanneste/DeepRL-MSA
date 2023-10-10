@@ -2,6 +2,7 @@ from generator import *
 from collections import namedtuple
 import pickle
 import tqdm
+import copy
 import torch
 import tensorflow as tf
 from tensorflow import keras
@@ -39,13 +40,15 @@ def process(data):
     return np.expand_dims(state, axis=0)
 
 
-def get_features(state):
+def get_features(s):
+    state = copy.deepcopy(s)
     state[state=='_']=0
     state = state.astype(int)
     with open("resnet.pkl", "rb") as file:
         pretrained_model = pickle.load(file)
     if pretrained_model:
-        return np.reshape(np.squeeze(pretrained_model.predict(process(state))), (1,2048))
+        features = np.reshape(np.squeeze(pretrained_model.predict(process(state))), (1,2048))
+        return features
     else:
         print("Model not loaded...")
         return 0
@@ -72,7 +75,7 @@ def step(state, coords):
 
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
 class ReplayMemory(object):
-    def __init__(self, capacity):
+    def __init__(self):
         self.memory = []
 
     def __len__(self):
@@ -114,10 +117,13 @@ def convergence():
     # way to say time to stop actions
 
     
-
+EPISODES = 1
+epsilon = 0.95
+reduction = epsilon/EPISODES
 def epsilonGreedy(model, features):
+    global epsilon, reduction
     if np.random.random() < 1-epsilon:
-         action = model.forward(features)
+        action = model.forward(features)
     else:
         action = (np.random.randint(0, 4), np.random.randint(0, 4))
     
@@ -127,16 +133,12 @@ def epsilonGreedy(model, features):
 
 
 def train_alignment_agent(sequences):
-    global epsilon, reduction
     replay = ReplayMemory()
-    EPISODES = 1
-    epsilon = 0.95
     model = DQN((2048,), 25)
     
-    for episode in tdqm.tqdm(range(EPISODES)):
+    for episode in tqdm.tqdm(range(EPISODES)):
         state = sequences
         replay.clear()
-        reduction = epsilon/EPISODES
         done = False
         
         while not done:
@@ -146,6 +148,7 @@ def train_alignment_agent(sequences):
             state = new_state
             
             if done:
+                print("done!!!!!!!!!!")
 #                update q-network
                 break
         
