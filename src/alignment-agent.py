@@ -132,21 +132,20 @@ def epsilonGreedy(model, features):
     return action
 
 
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+model = DQN((2048,), 25)
 loss_function = nn.MSELoss()
 def optimise_model():
     transitions = replay.sample(1)
     batch = Transition(*zip(*transitions))
     features = [get_features(state) for state in batch.state]
-    features = torch.tensor(features, dtype=torch.float32)
-    print(features)
+    q_values = model.forward(features)
     
     
+
 global replay
 replay = ReplayMemory()
-def train_alignment_agent(sequences):
-    model = DQN((2048,), 25)
-    
+def train_alignment_agent(sequences):    
+    optimizer = tf.keras.optimizers.Adam()
     for episode in tqdm.tqdm(range(EPISODES)):
         state = sequences
         replay.clear()
@@ -160,7 +159,6 @@ def train_alignment_agent(sequences):
             
             if done:
                 optimise_model()
-                print("done!!!!!!!!!!")
                 break
         
     
