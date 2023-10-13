@@ -140,7 +140,6 @@ def optimise_model():
     features = [get_features(state) for state in batch.state]
     q_values = model.forward(features)
     
-    
 
 global replay
 replay = ReplayMemory()

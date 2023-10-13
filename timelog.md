@@ -47,3 +47,25 @@
 
 ### 07 Oct 2023
 * *3 hours* CNN to extract features 
+
+### 08 Oct 2023
+
+## Week 3
+
+### 09 Oct 2023
+* *3 hours* DQN finished and training loop started
+
+### 10 Oct 2023
+* *1 hour* Training loop finished 
+
+### 11 Oct 2023
+* *2 hours* Meeting preparation 
+
+### 12 Oct 2023
+* *1 hour* Meeting
+
+### 13 Oct 2023
+* *3 hours* Literature review
+* *1 hour* Meeting write-up
+
+
