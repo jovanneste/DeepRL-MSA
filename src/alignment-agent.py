@@ -108,7 +108,7 @@ class DQN(nn.Module):
 
     def forward(self, features):
         q_values = self.model.predict(features)
-        return np.argmax(q_values)
+        return np.argmax(q_values), q_values
 
 def index_to_coords(index):
     return ((index-1)%5, (index-1)//5)
@@ -124,7 +124,8 @@ reduction = epsilon/EPISODES
 def epsilonGreedy(model, features):
     global epsilon, reduction
     if np.random.random() < 1-epsilon:
-        action = index_to_coords(model.forward(features))
+        index, q_value = model.forward(features)
+        action = index_to_coords(index)
     else:
         action = (np.random.randint(0, 4), np.random.randint(0, 4))
     
@@ -138,8 +139,19 @@ loss_function = nn.MSELoss()
 def optimise_model():
     transitions = replay.sample(1)
     batch = Transition(*zip(*transitions))
-    q_values = model.forward(batch.features)
-    print(q_values)
+    index, q_values = model.forward(batch.features)
+    
+    
+    non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, batch.next_state)))
+    
+    non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
+    
+    state_batch = torch.cat(batch.state)
+    action_batch = torch.cat(batch.action)
+    reward_batch = torch.cat(batch.reward)
+    
+    print(action_batch)
+    
     
 
 global replay
@@ -155,7 +167,11 @@ def train_alignment_agent(sequences):
             features = get_features(state)
             action = epsilonGreedy(model, features)
             new_state, reward, done = step(state, action)
-            replay.store_experience(state, action, new_state, reward, features)
+            state[state=='_']=0
+    
+            new_state[new_state=='_']=0
+       
+            replay.store_experience(torch.tensor(state.astype(int)), torch.tensor([action]), torch.tensor(new_state.astype(int)), torch.tensor([reward]), features)
             state = new_state
             
             if done:
