@@ -147,6 +147,7 @@ def epsilonGreedy(model, features):
 model = DQN((2048,), 25)
 loss_function = nn.MSELoss()
 BATCH_SIZE = 2
+GAMMA = 0.99
 def optimise_model():
     transitions = replay.sample(BATCH_SIZE)
     batch = Transition(*zip(*transitions))
@@ -159,11 +160,19 @@ def optimise_model():
     action_batch = torch.cat(batch.action)
     reward_batch = torch.cat(batch.reward)
     
-    
     state_action_values = q_values.gather(1, action_batch.unsqueeze(1))
+    next_state_values = torch.zeros(BATCH_SIZE)
+
+    non_final_next_states = non_final_next_states.chunk(2, dim=0)     
+
+
+    with torch.no_grad():
+        q_values = torch.tensor([model.forward(get_features(i.numpy()))[1] for i in non_final_next_states]).view(BATCH_SIZE,25)
+        next_state_values[non_final_mask] = q_values.max(1)[0]
     
-    next_state_values = torch.zeros(BATCH_SIZE, device=device)
+    expected_state_action_values = (next_state_values * GAMMA) + reward_batch
     
+    print(expected_state_action_values)
     
 
 global replay
@@ -180,7 +189,6 @@ def train_alignment_agent(sequences):
             action = epsilonGreedy(model, features)
             new_state, reward, done = step(state, action)
             state[state=='_']=0
-    
             new_state[new_state=='_']=0
        
             replay.store_experience(torch.tensor(state.astype(int)), torch.tensor([coords_to_index(action)]), torch.tensor(new_state.astype(int)), torch.tensor([reward]), features)
