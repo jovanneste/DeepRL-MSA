@@ -52,9 +52,11 @@ def get_features(s):
     else:
         print("Model not loaded...")
         return 0
-
     
+
+i=0
 def step(state, coords):
+    global i
     s_list = state.tolist()
     x, y = coords
     row = s_list[y]
@@ -68,7 +70,12 @@ def step(state, coords):
             row.insert(0, '_')
             
     new_state = np.array(s_list).reshape(state.shape)
-    done = True 
+    if i==0:
+        done = False
+        i+=1
+    else:
+        done = True
+        i=0
 #    use convergence check
     return new_state, score(new_state), done
 
@@ -139,11 +146,12 @@ def epsilonGreedy(model, features):
 
 model = DQN((2048,), 25)
 loss_function = nn.MSELoss()
+BATCH_SIZE = 2
 def optimise_model():
-    transitions = replay.sample(1)
+    transitions = replay.sample(BATCH_SIZE)
     batch = Transition(*zip(*transitions))
-    index, q_values = model.forward(batch.features)
-    
+    q_values = torch.tensor([model.forward(i)[1] for i in batch.features]).view(BATCH_SIZE,25)
+
     non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, batch.next_state)))
     non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
     
@@ -151,8 +159,10 @@ def optimise_model():
     action_batch = torch.cat(batch.action)
     reward_batch = torch.cat(batch.reward)
     
-    state_action_values = torch.tensor(q_values).gather(1, action_batch.unsqueeze(1))
-
+    
+    state_action_values = q_values.gather(1, action_batch.unsqueeze(1))
+    
+    next_state_values = torch.zeros(BATCH_SIZE, device=device)
     
     
 
