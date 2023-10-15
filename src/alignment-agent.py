@@ -122,7 +122,7 @@ def convergence():
     # way to say time to stop actions
 
     
-EPISODES = 1
+EPISODES = 2
 epsilon = 0.95
 reduction = epsilon/EPISODES
 def epsilonGreedy(model, features):
@@ -132,7 +132,6 @@ def epsilonGreedy(model, features):
         action = index_to_coords(index)
     else:
         action = (np.random.randint(0, 4), np.random.randint(0, 4))
-    
     if epsilon>0:
         epsilon-=reduction  
     return action
@@ -145,19 +144,15 @@ def optimise_model():
     batch = Transition(*zip(*transitions))
     index, q_values = model.forward(batch.features)
     
-    
     non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, batch.next_state)))
-    
     non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
     
     state_batch = torch.cat(batch.state)
     action_batch = torch.cat(batch.action)
     reward_batch = torch.cat(batch.reward)
     
-    print(action_batch)
-    print("--------------------------")
     state_action_values = torch.tensor(q_values).gather(1, action_batch.unsqueeze(1))
-    print(state_action_values)
+
     
     
 
@@ -178,7 +173,7 @@ def train_alignment_agent(sequences):
     
             new_state[new_state=='_']=0
        
-            replay.store_experience(torch.tensor(state.astype(int)), torch.tensor([action]), torch.tensor(new_state.astype(int)), torch.tensor([reward]), features)
+            replay.store_experience(torch.tensor(state.astype(int)), torch.tensor([coords_to_index(action)]), torch.tensor(new_state.astype(int)), torch.tensor([reward]), features)
             state = new_state
             
             if done:
