@@ -112,6 +112,10 @@ class DQN(nn.Module):
 
 def index_to_coords(index):
     return ((index-1)%5, (index-1)//5)
+
+def coords_to_index(coords):
+    x,y = coords
+    return (y*5)+x+1
     
 def convergence():
     pass
@@ -151,6 +155,9 @@ def optimise_model():
     reward_batch = torch.cat(batch.reward)
     
     print(action_batch)
+    print("--------------------------")
+    state_action_values = torch.tensor(q_values).gather(1, action_batch.unsqueeze(1))
+    print(state_action_values)
     
     
 
