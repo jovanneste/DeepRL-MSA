@@ -73,7 +73,7 @@ def step(state, coords):
     return new_state, score(new_state), done
 
 
-Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
+Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward', 'features'))
 class ReplayMemory(object):
     def __init__(self):
         self.memory = []
@@ -124,7 +124,7 @@ reduction = epsilon/EPISODES
 def epsilonGreedy(model, features):
     global epsilon, reduction
     if np.random.random() < 1-epsilon:
-        action = model.forward(features)
+        action = index_to_coords(model.forward(features))
     else:
         action = (np.random.randint(0, 4), np.random.randint(0, 4))
     
@@ -138,8 +138,8 @@ loss_function = nn.MSELoss()
 def optimise_model():
     transitions = replay.sample(1)
     batch = Transition(*zip(*transitions))
-    features = [get_features(state) for state in batch.state]
-    q_values = model.forward(features)
+    q_values = model.forward(batch.features)
+    print(q_values)
     
 
 global replay
@@ -152,9 +152,10 @@ def train_alignment_agent(sequences):
         done = False
         
         while not done:
-            action = epsilonGreedy(model, get_features(state))
+            features = get_features(state)
+            action = epsilonGreedy(model, features)
             new_state, reward, done = step(state, action)
-            replay.store_experience(state, action, new_state, reward)
+            replay.store_experience(state, action, new_state, reward, features)
             state = new_state
             
             if done:
