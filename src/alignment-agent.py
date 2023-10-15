@@ -108,9 +108,10 @@ class DQN(nn.Module):
 
     def forward(self, features):
         q_values = self.model.predict(features)
-        index = np.argmax(q_values)
-        return ((index-1)%5, (index-1)//5)
+        return np.argmax(q_values)
 
+def index_to_coords(index):
+    return ((index-1)%5, (index-1)//5)
     
 def convergence():
     pass
