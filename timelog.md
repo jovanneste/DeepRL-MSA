@@ -68,4 +68,12 @@
 * *3 hours* Literature review
 * *1 hour* Meeting write-up
 
+### 14 Oct 2023
 
+### 15 Oct 2023
+* *8 hours* Work on MSA RL agent - gradient updates
+
+## Week 4
+
+### 16 Oct 2023
+* *3 hours* Finish RL agent - slighly changed DQN model
