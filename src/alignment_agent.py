@@ -16,6 +16,8 @@ import warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
+
+#give big -ve reward in action is illegal 
 def score(msa):
     num_sequences = len(msa)
     alignment_length = len(msa[0])
@@ -57,7 +59,7 @@ def get_features(s):
         return 0
     
     
-# temp convergence check
+# temp convergence check, change to just run for n steps
 i=0
 def step(state, coords):
     global i
