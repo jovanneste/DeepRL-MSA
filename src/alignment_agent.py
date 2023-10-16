@@ -6,13 +6,15 @@ import copy
 import torch
 import tensorflow as tf
 from tensorflow import keras
-#from tensorflow.keras.layers import Dense, Flatten, Input
 from tensorflow.keras.applications.resnet50 import preprocess_input
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 
 def score(msa):
     num_sequences = len(msa)
@@ -207,7 +209,6 @@ def train_alignment_agent(sequences):
             if done:
                 loss = optimise_model()
                 print("Loss: " + str(loss))
-                exit()
                 break
         
     
