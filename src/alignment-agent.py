@@ -134,9 +134,6 @@ def convergence():
     # way to say time to stop actions
 
     
-EPISODES = 2
-epsilon = 0.95
-reduction = epsilon/EPISODES
 def epsilonGreedy(model, features):
     global epsilon, reduction
     if np.random.random() < 1-epsilon:
@@ -151,13 +148,6 @@ def epsilonGreedy(model, features):
     return action
 
 
-model = DQN((2048,), 25)
-LR = 1e-4
-loss_function = nn.MSELoss()
-BATCH_SIZE = 2
-GAMMA = 0.99
-
-optimizer = optim.Adam(model.parameters(), lr=LR)
 def optimise_model():
     transitions = replay.sample(BATCH_SIZE)
     batch = Transition(*zip(*transitions))
@@ -187,7 +177,6 @@ def optimise_model():
 
     # Calculate the expected Q-values based on the Bellman equation
     expected_state_action_values = (next_state_values * GAMMA) + reward_batch.float()
-
     criterion = torch.nn.SmoothL1Loss() 
     loss = criterion(state_action_values, expected_state_action_values.unsqueeze(1))
 
@@ -197,16 +186,12 @@ def optimise_model():
     
     return loss.item()
 
-    
-global replay
-replay = ReplayMemory()
 
 def train_alignment_agent(sequences):    
     for episode in tqdm.tqdm(range(EPISODES)):
         state = sequences
         replay.clear()
         done = False
-#        optimizer = optim.Adam(model.params(), lr=LR)
         while not done:
             features = get_features(state)
             action = epsilonGreedy(model, features)
@@ -224,7 +209,15 @@ def train_alignment_agent(sequences):
                 break
         
     
-
+global replay
+replay = ReplayMemory()
+model = DQN((2048,), 25)
+LR = 1e-4
+BATCH_SIZE = 2
+GAMMA = 0.99
+EPISODES = 2
+epsilon = 0.95
+reduction = epsilon/EPISODES
+optimizer = optim.Adam(model.parameters(), lr=LR)
 s = generate_sequence(5,5)
-print(s)
 train_alignment_agent(s)
