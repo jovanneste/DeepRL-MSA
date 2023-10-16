@@ -159,8 +159,7 @@ BATCH_SIZE = 2
 GAMMA = 0.99
 
 optimizer = optim.Adam(model.parameters(), lr=LR)
-def optimise_model3():
-    print("READY TO OPTIMISE MODEL")
+def optimise_model():
     transitions = replay.sample(BATCH_SIZE)
     batch = Transition(*zip(*transitions))
 
@@ -202,6 +201,7 @@ def optimise_model3():
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
+    print(loss.item())
     exit()
 
     return loss.item()  # Return the loss as a scalar
@@ -228,7 +228,7 @@ def train_alignment_agent(sequences):
             state = new_state
             
             if done:
-                loss = optimise_model3()
+                loss = optimise_model()
                 print("Loss: ", + str(loss))
                 exit()
                 break
