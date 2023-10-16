@@ -53,7 +53,8 @@ def get_features(s):
         print("Model not loaded...")
         return 0
     
-
+    
+# temp convergence check
 i=0
 def step(state, coords):
     global i
@@ -115,14 +116,12 @@ class DQN(nn.Module):
             nn.Linear(64, self.n_actions)
         )
         return model
-    
-    def params(self):
-        return self.model.parameters()
 
     def forward(self, features):
         q_values = self.model(features)
         return torch.argmax(q_values), q_values
 
+    
 def index_to_coords(index):
     return ((index-1)%5, (index-1)//5)
 
@@ -174,11 +173,8 @@ def optimise_model():
     reward_batch = torch.cat(batch.reward, dim=0)
     
     state_action_values = torch.gather(q_values, 1, action_batch.view(-1, 1))
-
-
     next_state_values = torch.zeros(BATCH_SIZE, dtype=torch.float32)
 
-    # Calculate the expected Q-values for non-final states
     if non_final_mask.any():
         non_final_next_states = non_final_next_states.chunk(2, dim=0)
         q_values = []
@@ -192,24 +188,18 @@ def optimise_model():
     # Calculate the expected Q-values based on the Bellman equation
     expected_state_action_values = (next_state_values * GAMMA) + reward_batch.float()
 
-
-    # Calculate the loss using the Huber loss
-    criterion = torch.nn.SmoothL1Loss()  # Huber loss
+    criterion = torch.nn.SmoothL1Loss() 
     loss = criterion(state_action_values, expected_state_action_values.unsqueeze(1))
 
-    # Optimize the model
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-    print(loss.item())
-    exit()
-
-    return loss.item()  # Return the loss as a scalar
+    
+    return loss.item()
 
     
 global replay
 replay = ReplayMemory()
-
 
 def train_alignment_agent(sequences):    
     for episode in tqdm.tqdm(range(EPISODES)):
