@@ -11,10 +11,10 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 import warnings
-warnings.simplefilter(action='ignore', category=FutureWarning)
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def score(msa):
     num_sequences = len(msa)
