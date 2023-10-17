@@ -82,6 +82,7 @@ def step(state, coords):
     else:
         done = True
         count=0
+    print("Count = " + str(count))
     return new_state, score(state, new_state), done
 
 
@@ -189,7 +190,7 @@ def optimise_model():
 
 def train_alignment_agent(sequences):    
     for episode in tqdm.tqdm(range(EPISODES)):
-        print("EPISODE: " +str(episode))
+        print("EPISODE: " +str(episode+1))
         state = sequences
         replay.clear()
         done = False
@@ -197,6 +198,7 @@ def train_alignment_agent(sequences):
             features = get_features(state)
             action = epsilonGreedy(model, features)
             new_state, reward, done = step(state, action)
+            print("Reward for action " +str(action)+" = " +str(reward))
             state[state=='_']=0
             new_state[new_state=='_']=0
        
@@ -212,14 +214,14 @@ global replay
 replay = ReplayMemory()
 model = DQN((2048,), 25)
 LR = 1e-4
-BATCH_SIZE = 2
+BATCH_SIZE = 32
 GAMMA = 0.99
-EPISODES = 2
+EPISODES = 64
 epsilon = 0.95
 reduction = epsilon/EPISODES
 nSteps = 5
 optimizer = optim.Adam(model.parameters(), lr=LR)
-s = generate_sequence(5,5)
-print(s)
-print(step(s, index_to_coords(ind)))
-#train_alignment_agent(s)
+
+
+s = generate_sequence(5, 5, 0.2, 0.4)
+train_alignment_agent(s)
