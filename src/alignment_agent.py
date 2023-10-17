@@ -17,20 +17,22 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
-#give big -ve reward in action is illegal 
-def score(msa):
-    num_sequences = len(msa)
-    alignment_length = len(msa[0])
+def score(state, new_state):
+    if (state==new_state):
+#        if action is not valid
+        return -100
+    num_sequences = len(new_state)
+    alignment_length = len(new_state[0])
     score = 0
 
     for i in range(alignment_length):
         for j in range(num_sequences):
             for k in range(j + 1, num_sequences):
-                if i >= len(msa[j]) or i >= len(msa[k]):
+                if i >= len(new_state[j]) or i >= len(new_state[k]):
                     continue  
 
-                char_j = msa[j][i]
-                char_k = msa[k][i]
+                char_j = new_state[j][i]
+                char_k = new_state[k][i]
 
                 if char_j != '_' and char_k != '_':
                     if char_j == char_k:
@@ -83,7 +85,7 @@ def step(state, coords):
         done = True
         i=0
 #    use convergence check
-    return new_state, score(new_state), done
+    return new_state, score(state, new_state), done
 
 
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward', 'features'))
