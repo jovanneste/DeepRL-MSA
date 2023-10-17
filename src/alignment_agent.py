@@ -195,7 +195,7 @@ def train_alignment_agent(sequences):
         replay.clear()
         done, change = False, False
         while not done:
-            if change or len(memory)==0:
+            if change or len(replay)==0:
                 print("New features calculated...")
                 features = get_features(state)
             action = epsilonGreedy(model, features)
@@ -223,12 +223,12 @@ LR = 1e-4
 BATCH_SIZE = 4
 GAMMA = 0.99
 EPISODES = 64
-epsilon = 0.95
+epsilon = 0.8
 reduction = epsilon/EPISODES
 nSteps = 10
 optimizer = optim.Adam(model.parameters(), lr=LR)
 
 
-s = generate_sequence(5, 5, 0.2, 0.4)
+s = generate_sequence(5, 5, 0.2, 0.2)
 print(s)
 train_alignment_agent(s)
