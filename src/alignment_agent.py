@@ -193,11 +193,17 @@ def train_alignment_agent(sequences):
         print("EPISODE: " +str(episode+1))
         state = sequences
         replay.clear()
-        done = False
+        done, change = False, False
         while not done:
-            features = get_features(state)
+            if change or len(memory)==0:
+                print("New features calculated...")
+                features = get_features(state)
             action = epsilonGreedy(model, features)
             new_state, reward, done = step(state, action)
+            if reward>0:
+                change = True
+            else:
+                change = False
             print("Reward for action " +str(action)+" = " +str(reward))
             state[state=='_']=0
             new_state[new_state=='_']=0
@@ -214,14 +220,15 @@ global replay
 replay = ReplayMemory()
 model = DQN((2048,), 25)
 LR = 1e-4
-BATCH_SIZE = 32
+BATCH_SIZE = 4
 GAMMA = 0.99
 EPISODES = 64
 epsilon = 0.95
 reduction = epsilon/EPISODES
-nSteps = 5
+nSteps = 10
 optimizer = optim.Adam(model.parameters(), lr=LR)
 
 
 s = generate_sequence(5, 5, 0.2, 0.4)
+print(s)
 train_alignment_agent(s)
