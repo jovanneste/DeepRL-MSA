@@ -18,9 +18,9 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 def score(state, new_state):
-    if (state==new_state):
+    if ((state==new_state).all()):
 #        if action is not valid
-        return -100
+        return -50
     num_sequences = len(new_state)
     alignment_length = len(new_state[0])
     score = 0
@@ -60,11 +60,9 @@ def get_features(s):
         print("Model not loaded...")
         return 0
     
-    
-# temp convergence check, change to just run for n steps
-i=0
+count = 0
 def step(state, coords):
-    global i
+    global count
     s_list = state.tolist()
     x, y = coords
     row = s_list[y]
@@ -78,13 +76,12 @@ def step(state, coords):
             row.insert(0, '_')
             
     new_state = np.array(s_list).reshape(state.shape)
-    if i==0:
+    if count<nSteps:
         done = False
-        i+=1
+        count+=1
     else:
         done = True
-        i=0
-#    use convergence check
+        count=0
     return new_state, score(state, new_state), done
 
 
@@ -136,11 +133,7 @@ def coords_to_index(coords):
     x,y = coords
     return (y*5)+x+1
     
-def convergence():
-    pass
-    # way to say time to stop actions
 
-    
 def epsilonGreedy(model, features):
     global epsilon, reduction
     if np.random.random() < 1-epsilon:
@@ -173,7 +166,7 @@ def optimise_model():
     next_state_values = torch.zeros(BATCH_SIZE, dtype=torch.float32)
 
     if non_final_mask.any():
-        non_final_next_states = non_final_next_states.chunk(2, dim=0)
+        non_final_next_states = non_final_next_states.chunk(BATCH_SIZE, dim=0)
         q_values = []
         
         for state in non_final_next_states:
@@ -215,7 +208,6 @@ def train_alignment_agent(sequences):
                 print("Loss: " + str(loss))
                 break
         
-    
 global replay
 replay = ReplayMemory()
 model = DQN((2048,), 25)
@@ -225,6 +217,9 @@ GAMMA = 0.99
 EPISODES = 2
 epsilon = 0.95
 reduction = epsilon/EPISODES
+nSteps = 5
 optimizer = optim.Adam(model.parameters(), lr=LR)
 s = generate_sequence(5,5)
-train_alignment_agent(s)
+print(s)
+print(step(s, index_to_coords(ind)))
+#train_alignment_agent(s)
