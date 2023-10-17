@@ -7,7 +7,7 @@ def char_to_int(sequence):
 
 def generate_sequence(n_sequences, length, mutation_prob=0.2, del_prob=0.2):
     sequences = []
-    aa = ['M', 'A', 'T', 'G', 'Y']
+    aa = ['A', 'C', 'G', 'T']
 
     initial_sequence = [random.choice(aa) for _ in range(length)]
     sequences.append(initial_sequence)
