@@ -29,3 +29,10 @@ class Agent():
         print('\nAgent Initialized\n')
         return model
                   
+    def get_action(self, state):
+        if np.random.rand() < self.epsilon:
+            return (np.random.randint(0, 4), np.random.randint(0, 4))
+        return np.argmax(self.model.predict(state))
+                  
+    
+                  
