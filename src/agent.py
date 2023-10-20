@@ -81,7 +81,8 @@ class Agent():
                 row.insert(row[x], 0)
 
         new_state = np.array(s_list).reshape(state.shape)
-        return new_state
+#        needs to return done too
+        return new_state, self.score(new_state)
                   
     
 a = Agent()
