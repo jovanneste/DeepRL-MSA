@@ -41,6 +41,28 @@ class Agent():
         action_values = self.model.predict(state)
         return self.index_to_coords(np.argmax(action_values))
     
+    def score(state):
+        n = state.shape[0]  # Assuming it's a square array
+        score = 0.0
+
+        for i in range(n):
+            for j in range(n):
+                for k in range(i, n):
+                    for l in range(j, n):
+                        if state[i, j] == 0 or state[k, l] == 0:
+                            # Apply a gap penalty for any element being 0
+                            pair_score = -0.5
+                        elif state[i, j] == state[k, l]:
+                            # Pair score for matching elements
+                            pair_score = 1
+                        else:
+                            # A different score for non-matching non-zero elements
+                            pair_score = 0 
+                        score += pair_score
+
+        normalized_score = score/(n*n)
+        return normalized_score
+    
     def step(self, state, coords):
         s_list = state.tolist()
         x, y = coords
