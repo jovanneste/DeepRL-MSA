@@ -39,8 +39,23 @@ class Agent():
             return (np.random.randint(0, 5), np.random.randint(0, 5))
         
         action_values = self.model.predict(state)
-        print(np.argmax(action_values))
         return self.index_to_coords(np.argmax(action_values))
+    
+    def step(self, state, coords):
+        s_list = state.tolist()
+        x, y = coords
+        row = s_list[y]
+
+        if row[x] == 0:
+            row.pop(x)
+            row.append(0)
+        else:
+            if 0 in row:
+                row.pop(row.index(0))
+                row.insert(row[x], 0)
+
+        new_state = np.array(s_list).reshape(state.shape)
+        return new_state
                   
     
 a = Agent()
@@ -49,4 +64,5 @@ action = a.get_action(s.reshape(1,5,5,1))
 
 print(s)
 print(action)
+print(a.step(s, action))
                   
