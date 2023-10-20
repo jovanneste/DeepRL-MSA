@@ -17,6 +17,7 @@ class Agent():
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
         
+        
     def _build_model(self):
         model = Sequential()
         model.add(Input((5, 5, 1)))
@@ -31,15 +32,18 @@ class Agent():
         print('\nAgent Initialised\n')
         return model
     
+    
     def index_to_coords(self, index):
         return (index%5, index//5)
                   
+        
     def get_action(self, state):
         if np.random.rand() < self.epsilon:
             return (np.random.randint(0, 5), np.random.randint(0, 5))
         
         action_values = self.model.predict(state)
         return self.index_to_coords(np.argmax(action_values))
+    
     
     def score(state):
         n = state.shape[0]  # Assuming it's a square array
@@ -60,8 +64,8 @@ class Agent():
                             pair_score = 0 
                         score += pair_score
 
-        normalized_score = score/(n*n)
-        return normalized_score
+        return score/(n*n)
+    
     
     def step(self, state, coords):
         s_list = state.tolist()
