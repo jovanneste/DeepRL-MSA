@@ -1,6 +1,9 @@
 # Pickle files
 *.pkl
 
+# HDF5 files
+*.hdf5
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
