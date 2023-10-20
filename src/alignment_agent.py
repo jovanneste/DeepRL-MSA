@@ -76,13 +76,12 @@ def step(state, coords):
             row.insert(0, '_')
             
     new_state = np.array(s_list).reshape(state.shape)
-    if count<nSteps:
+    if count<=nSteps:
         done = False
         count+=1
     else:
         done = True
         count=0
-    print("Count = " + str(count))
     return new_state, score(state, new_state), done
 
 
@@ -138,11 +137,9 @@ def coords_to_index(coords):
 def epsilonGreedy(model, features):
     global epsilon, reduction
     if np.random.random() < 1-epsilon:
-        print("MODEL ACTION")
         index, q_value = model.forward(torch.tensor(features))
         action = index_to_coords(index)
     else:
-        print("RANDOM ACTION")
         action = (np.random.randint(0, 4), np.random.randint(0, 4))
     if epsilon>0:
         epsilon-=reduction  
@@ -196,7 +193,6 @@ def train_alignment_agent(sequences):
         done, change = False, False
         while not done:
             if change or len(replay)==0:
-                print("New features calculated...")
                 features = get_features(state)
             action = epsilonGreedy(model, features)
             new_state, reward, done = step(state, action)
@@ -204,7 +200,7 @@ def train_alignment_agent(sequences):
                 change = True
             else:
                 change = False
-            print("Reward for action " +str(action)+" = " +str(reward))
+
             state[state=='_']=0
             new_state[new_state=='_']=0
        
@@ -214,6 +210,7 @@ def train_alignment_agent(sequences):
             if done:
                 loss = optimise_model()
                 print("Loss: " + str(loss))
+                print(state)
                 break
         
 global replay
