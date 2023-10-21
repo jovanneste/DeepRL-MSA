@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def initialise_new_game(agent, state):
     agent.memory.clear()
     agent.memory.store_experience(state, (0,0), 0)
@@ -38,11 +37,3 @@ def play_episode(agent, sequences):
             print("Episode done, score: "+str(score))
             break
     return score
-
-
-#
-#a = Agent()
-#s = generate_sequence(5, 5, 0.2, 0.4)
-#score = 0
-#print(s)
-#play_episode(a, s)

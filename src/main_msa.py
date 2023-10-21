@@ -16,10 +16,10 @@ for i in range(1):
     scores.append(score)
     
     print('\nEpisode: ' + str(i))
-    print('Steps: ' + str(agent.total_timesteps - timesteps))
+    print('Steps: ' + str(dqn_agent.total_timesteps - timesteps))
     print('Duration: ' + str(time.time() - timee))
     print('Score: ' + str(score))
-    print('Epsilon: ' + str(agent.epsilon))
+    print('Epsilon: ' + str(dqn_agent.epsilon))
     
     if i%100==0 and i!=0:
         average.append(sum(scores)/len(scores))
