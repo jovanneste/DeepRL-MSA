@@ -1,5 +1,4 @@
 from agent_memory import Memory
-from generator import *
 from tensorflow.keras.models import Sequential, clone_model
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, Input
 from tensorflow.keras.optimizers import Adam
@@ -8,7 +7,7 @@ import numpy as np
 
 class Agent():
     def __init__(self):
-        self.memory = Memory()
+        self.memory = Memory(100)
         self.epsilon = 0.1
         self.epsilon_decay = 0.9/100000
         self.gamma = 0.95
@@ -85,12 +84,5 @@ class Agent():
 #        needs to return done too
         return new_state, self.score(new_state), True
                   
-    
-a = Agent()
-s = generate_sequence(5, 5, 0.2, 0.4)
-action = a.get_action(s.reshape(1,5,5,1))
 
-print(s)
-print(action)
-print(a.step(s, action))
                   
