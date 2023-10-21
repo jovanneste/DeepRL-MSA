@@ -46,6 +46,7 @@ class Agent():
     
     
     def score(state):
+#        need negative score for illegal moves
         n = state.shape[0]  # Assuming it's a square array
         score = 0.0
 
@@ -82,7 +83,7 @@ class Agent():
 
         new_state = np.array(s_list).reshape(state.shape)
 #        needs to return done too
-        return new_state, self.score(new_state)
+        return new_state, self.score(new_state), True
                   
     
 a = Agent()

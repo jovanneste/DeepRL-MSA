@@ -14,8 +14,17 @@ def take_step(agent):
         agent.model.save_weights('recent_weights.hdf5')
         print("Weights saved")
         
-        action = agent.get_action()
+        new_state, reward, done = agent.step(agent.memory.actions[-1])
+        next_action = agent.get_action(new_state)
+        
+        agent.memory.store_experience(next_state, next_action, reward)
     
+        if done:
+            return (score+reward), True
+        
+#        update model here
+        
+        return (score+reward), False
         
     
     
