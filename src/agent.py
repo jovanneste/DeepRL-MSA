@@ -9,6 +9,7 @@ class Agent():
     def __init__(self):
         self.memory = Memory(500)
         self.epsilon = 0.99
+        self.epsilon_min = 0.05
         self.epsilon_decay = 0.9/100000
         self.gamma = 0.95
         self.learning_rate = 1e-4
@@ -17,6 +18,7 @@ class Agent():
         self.total_timesteps = 0
         self.memory_threshold = 100
         self.batch_size = 2
+        self.learns = 0
         
         
     def _build_model(self):
@@ -38,8 +40,8 @@ class Agent():
         return (index%5, index//5)
     
     def coords_to_index(self, coords):
-    x,y = coords
-    return (y*5)+x
+        x,y = coords
+        return (y*5)+x
         
     def get_action(self, state):
         if np.random.rand() < self.epsilon:
@@ -94,5 +96,11 @@ class Agent():
         next_state_values = self.model_target.predict(np.array(next_states).reshape(self.batch_size,5,5,1))
         
         for i in range(self.batch_size):
-            print(labels[i][coords_to_index(actions[i])])
+            labels[i][self.coords_to_index(actions[i])] = rewards[i] + (self.gamma * max(next_state_values[i]))
+        
+        self.model.fit(np.array(states), labels, batch_size=self.batch_size, epochs=1, verbose=0)
+        
+        if self.epsilon > self.epsilon_min:
+            self.epsilon -= self.epsilon_decay
+        self.learns += 1
                   
