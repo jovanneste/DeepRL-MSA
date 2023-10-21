@@ -5,7 +5,7 @@ def char_to_int(sequence):
     char_to_number = {chr(65 + i): i + 1 for i in range(26) if chr(65 + i) != '_'}
     return np.array([[char_to_number.get(c, '0') for c in row] for row in sequence])
 
-def generate_sequence(n_sequences, length, mutation_prob=0.2, del_prob=0.2):
+def generate(n_sequences, length, mutation_prob=0.2, del_prob=0.2):
     sequences = []
     aa = ['A', 'C', 'G', 'T']
 

@@ -1,6 +1,5 @@
 import numpy as np
-from agent import Agent
-from seq_generator import *
+
 
 def initialise_new_game(agent, state):
     agent.memory.clear()
@@ -30,6 +29,7 @@ def take_step(agent):
     
 def play_episode(agent, sequences):
     global score
+    score = 0
     initialise_new_game(agent, sequences)
     done = False
     while True:
@@ -40,9 +40,9 @@ def play_episode(agent, sequences):
     return score
 
 
-
-a = Agent()
-s = generate_sequence(5, 5, 0.2, 0.4)
-score = 0
-print(s)
-play_episode(a, s)
+#
+#a = Agent()
+#s = generate_sequence(5, 5, 0.2, 0.4)
+#score = 0
+#print(s)
+#play_episode(a, s)

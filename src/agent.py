@@ -10,7 +10,7 @@ class Agent():
         self.memory = Memory(500)
         self.epsilon = 0.99
         self.epsilon_min = 0.05
-        self.epsilon_decay = 0.9/100000
+        self.epsilon_decay = 0.9/1000
         self.gamma = 0.95
         self.learning_rate = 1e-4
         self.model = self._build_model()
