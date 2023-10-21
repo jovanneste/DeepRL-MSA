@@ -8,7 +8,7 @@ import numpy as np
 class Agent():
     def __init__(self):
         self.memory = Memory(100)
-        self.epsilon = 0.1
+        self.epsilon = 0.99
         self.epsilon_decay = 0.9/100000
         self.gamma = 0.95
         self.learning_rate = 1e-4
@@ -83,7 +83,7 @@ class Agent():
 
         new_state = np.array(s_list).reshape(state.shape)
 #        needs to return done too
-        return new_state, self.score(new_state), True
+        return new_state, self.score(new_state), False
                   
 
                   

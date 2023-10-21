@@ -13,16 +13,19 @@ def take_step(agent):
     if agent.total_timesteps % 1000 == 0:
         agent.model.save_weights('recent_weights.hdf5')
         print("Weights saved")
-        
+    print("Memory size: " + str(len(agent.memory)))
     next_state, reward, done = agent.step(agent.memory.states[-1], agent.memory.actions[-1])
     next_action = agent.get_action(next_state)
     agent.memory.store_experience(next_state, next_action, reward)
+    
+    print(reward)
 
     if done:
         return (score+reward), True
 
-    if len(agent) < agent.memory_threshold:
+    if len(agent.memory) > agent.memory_threshold:
         print("Update model")
+        done = True
 
     return (score+reward), False
 
