@@ -27,7 +27,7 @@ class Agent():
         model.add(Conv2D(filters=4, kernel_size=(3, 3), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Conv2D(filters=8, kernel_size=(3, 3), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Flatten())
-        model.add(Dense(512, activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Dense(64, activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Dense(25, activation='linear'))
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
