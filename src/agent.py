@@ -56,13 +56,10 @@ class Agent():
                 for k in range(i, n):
                     for l in range(j, n):
                         if new_state[i, j] == 0 or new_state[k, l] == 0:
-                            # Apply a gap penalty for any element being 0
                             pair_score = -0.5
                         elif new_state[i, j] == new_state[k, l]:
-                            # Pair score for matching elements
                             pair_score = 1
                         else:
-                            # A different score for non-matching non-zero elements
                             pair_score = 0 
                         score += pair_score
 

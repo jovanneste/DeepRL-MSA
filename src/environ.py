@@ -7,7 +7,6 @@ def initialise_new_game(agent, state):
     agent.memory.store_experience(state, (0,0), 0)
     
 
-
 def take_step(agent):
     agent.total_timesteps += 1
     if agent.total_timesteps % 100 == 0:
@@ -28,7 +27,6 @@ def take_step(agent):
         return (score+reward), True
 
     return (score+reward), False
-
     
     
 def play_episode(agent, sequences):
@@ -45,8 +43,6 @@ def play_episode(agent, sequences):
 
 a = Agent()
 s = generate_sequence(5, 5, 0.2, 0.4)
-
 score = 0
 print(s)
-
 play_episode(a, s)
