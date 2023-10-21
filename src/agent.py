@@ -15,7 +15,7 @@ class Agent():
         self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
-        self.memory_threshold = 256
+        self.memory_threshold = 100
         
         
     def _build_model(self):
@@ -82,6 +82,12 @@ class Agent():
         new_state = np.array(s_list).reshape(state.shape)
 #        needs to return done too
         return new_state, self.score(state, new_state), False
-                  
 
+
+    def learn(self):
+        states, next_states, actions, rewards = self.memory.sample(2)
+        print(states)
+        print(next_states)
+        print(actions)
+        print(rewards)
                   

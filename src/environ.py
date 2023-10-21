@@ -36,6 +36,7 @@ def play_episode(agent, sequences):
     while True:
         score, done = take_step(agent)
         if done:
+            print("Episode done, score: "+str(score))
             break
     return score
 
