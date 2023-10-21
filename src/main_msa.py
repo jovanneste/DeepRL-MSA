@@ -9,7 +9,7 @@ sequences = seq_generator.generate(5,5,0.2,0.4)
 scores = []
 average = []
 
-for i in range(1):
+for i in range(101):
     timesteps = dqn_agent.total_timesteps
     timee = time.time()
     score = environment.play_episode(dqn_agent, sequences)
