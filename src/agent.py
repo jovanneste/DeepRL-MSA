@@ -45,19 +45,20 @@ class Agent():
         return self.index_to_coords(np.argmax(action_values))
     
     
-    def score(self, state):
-#        need negative score for illegal moves
-        n = state.shape[0]  # Assuming it's a square array
+    def score(self, old_state, new_state):
+        if (old_state==new_state).all():
+            return -4
+        n = new_state.shape[0]  # Assuming it's a square array
         score = 0.0
 
         for i in range(n):
             for j in range(n):
                 for k in range(i, n):
                     for l in range(j, n):
-                        if state[i, j] == 0 or state[k, l] == 0:
+                        if new_state[i, j] == 0 or new_state[k, l] == 0:
                             # Apply a gap penalty for any element being 0
                             pair_score = -0.5
-                        elif state[i, j] == state[k, l]:
+                        elif new_state[i, j] == new_state[k, l]:
                             # Pair score for matching elements
                             pair_score = 1
                         else:
@@ -83,7 +84,7 @@ class Agent():
 
         new_state = np.array(s_list).reshape(state.shape)
 #        needs to return done too
-        return new_state, self.score(new_state), False
+        return new_state, self.score(state, new_state), False
                   
 
                   
