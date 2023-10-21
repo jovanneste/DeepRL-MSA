@@ -103,4 +103,8 @@ class Agent():
         if self.epsilon > self.epsilon_min:
             self.epsilon -= self.epsilon_decay
         self.learns += 1
+        
+        if self.learns % 1000 == 0:
+            self.model_target.set_weights(self.model.get_weights())
+            print('\nTarget model updated')
                   
