@@ -1,19 +1,21 @@
-from collections import namedtuple
-
-Transition = namedtuple('Transition', ('state', 'action', 'reward'))
+from collections import deque
 
 class Memory():
-    def __init__(self):
-        self.memory = []
+    def __init__(self,max_len):
+        self.max_len = max_len
+        self.states = deque(maxlen = max_len)
+        self.actions = deque(maxlen = max_len)
+        self.rewards = deque(maxlen = max_len)
 
-    def __len__(self):
-        return len(self.memory)
-    
-    def store_experience(self, *args):
-        self.memory.append(Transition(*args))
-
-    def sample(self, batch_size):
-        return random.sample(self.memory, batch_size)
+    def store_experience(self,next_frame, next_frames_reward, next_action, next_frame_terminal):
+        self.states.append(next_frame)
+        self.actions.append(next_action)
+        self.rewards.append(next_frames_reward)
 
     def clear(self):
-        self.memory = []
+        self.states = deque(maxlen = max_len)
+        self.actions = deque(maxlen = max_len)
+        self.rewards = deque(maxlen = max_len)
+    
+    def __len__(self):
+        return len(self.states)
