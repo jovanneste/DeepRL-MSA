@@ -15,6 +15,7 @@ class Agent():
         self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
+        self.memory_threshold = 50
         
         
     def _build_model(self):
@@ -40,7 +41,7 @@ class Agent():
         if np.random.rand() < self.epsilon:
             return (np.random.randint(0, 5), np.random.randint(0, 5))
         
-        action_values = self.model.predict(state)
+        action_values = self.model.predict(state.reshape(1,5,5,1))
         return self.index_to_coords(np.argmax(action_values))
     
     
