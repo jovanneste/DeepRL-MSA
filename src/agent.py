@@ -72,14 +72,14 @@ class Agent():
         s_list = state.tolist()
         x, y = coords
         row = s_list[y]
-
+        
         if row[x] == 0:
             row.pop(x)
             row.append(0)
         else:
             if 0 in row:
                 row.pop(row.index(0))
-                row.insert(row[x], 0)
+                row.insert(x, 0)
 
         new_state = np.array(s_list).reshape(state.shape)
 #        needs to return done too

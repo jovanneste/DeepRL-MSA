@@ -14,6 +14,7 @@ def take_step(agent):
         agent.model.save_weights('recent_weights.hdf5')
         print("Weights saved")
     print("Memory size: " + str(len(agent.memory)))
+    print("Action: " +str(agent.memory.actions[-1]))
     next_state, reward, done = agent.step(agent.memory.states[-1], agent.memory.actions[-1])
     next_action = agent.get_action(next_state)
     agent.memory.store_experience(next_state, next_action, reward)
@@ -25,7 +26,7 @@ def take_step(agent):
 
     if len(agent.memory) > agent.memory_threshold:
         print("Update model")
-        done = True
+        return (score+reward), True
 
     return (score+reward), False
 
@@ -37,7 +38,6 @@ def play_episode(agent, sequences):
     done = False
     while True:
         score, done = take_step(agent)
-        print(score)
         if done:
             break
     return score
