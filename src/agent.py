@@ -7,7 +7,7 @@ import numpy as np
 
 class Agent():
     def __init__(self):
-        self.memory = Memory(100)
+        self.memory = Memory(500)
         self.epsilon = 0.99
         self.epsilon_decay = 0.9/100000
         self.gamma = 0.95
@@ -15,7 +15,7 @@ class Agent():
         self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
-        self.memory_threshold = 50
+        self.memory_threshold = 256
         
         
     def _build_model(self):
