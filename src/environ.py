@@ -17,7 +17,7 @@ def take_step(agent):
     
     print("Action: " + str(agent.memory.actions[-1]))
         
-    new_state, reward, done = agent.step(agent.memory.actions[-1])
+    new_state, reward, done = agent.step(agent.memory.states[-1], agent.memory.actions[-1])
     print(new_state)
     print(reward)
     next_action = agent.get_action(new_state)

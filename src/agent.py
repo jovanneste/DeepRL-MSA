@@ -44,7 +44,7 @@ class Agent():
         return self.index_to_coords(np.argmax(action_values))
     
     
-    def score(state):
+    def score(self, state):
 #        need negative score for illegal moves
         n = state.shape[0]  # Assuming it's a square array
         score = 0.0
