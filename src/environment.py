@@ -1,6 +1,6 @@
 import numpy as np
 from agent import Agent
-from generator import *
+from seq_generator import *
 
 def initialise_new_game(agent, state):
     agent.memory.clear()
