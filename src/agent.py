@@ -16,6 +16,7 @@ class Agent():
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
         self.memory_threshold = 100
+        self.batch_size = 2
         
         
     def _build_model(self):
@@ -35,7 +36,10 @@ class Agent():
     
     def index_to_coords(self, index):
         return (index%5, index//5)
-                  
+    
+    def coords_to_index(self, coords):
+    x,y = coords
+    return (y*5)+x
         
     def get_action(self, state):
         if np.random.rand() < self.epsilon:
@@ -85,9 +89,10 @@ class Agent():
 
 
     def learn(self):
-        states, next_states, actions, rewards = self.memory.sample(2)
-        print(states)
-        print(next_states)
-        print(actions)
-        print(rewards)
+        states, next_states, actions, rewards = self.memory.sample(self.batch_size)
+        labels = self.model.predict(np.array(states).reshape(self.batch_size,5,5,1))
+        next_state_values = self.model_target.predict(np.array(next_states).reshape(self.batch_size,5,5,1))
+        
+        for i in range(self.batch_size):
+            print(labels[i][coords_to_index(actions[i])])
                   

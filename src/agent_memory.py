@@ -1,4 +1,5 @@
 from collections import deque
+import random 
 
 class Memory():
     def __init__(self, max_len):

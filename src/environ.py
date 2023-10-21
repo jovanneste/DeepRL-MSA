@@ -16,14 +16,13 @@ def take_step(agent):
     next_state, reward, done = agent.step(agent.memory.states[-1], agent.memory.actions[-1])
     next_action = agent.get_action(next_state)
     agent.memory.store_experience(next_state, next_action, reward)
-    
-    print(reward)
 
     if done:
         return (score+reward), True
 
     if len(agent.memory) > agent.memory_threshold:
         print("Update model")
+        agent.learn()
         return (score+reward), True
 
     return (score+reward), False
