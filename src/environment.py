@@ -1,7 +1,10 @@
 import numpy as np
+import os
+
 
 def initialise_new_game(agent, state):
     agent.memory.clear()
+    os.remove('recent_weights.hdf5')
     agent.memory.store_experience(state, (0,0), 0)
     
 

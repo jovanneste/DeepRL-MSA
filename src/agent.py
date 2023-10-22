@@ -3,20 +3,21 @@ from tensorflow.keras.models import Sequential, clone_model
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, Input
 from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
+tf.keras.utils.disable_interactive_logging()
 import numpy as np
 
 class Agent():
     def __init__(self):
         self.memory = Memory(2500)
-        self.epsilon = 0.99
-        self.epsilon_min = 0.05
-        self.epsilon_decay = 0.9/1000
+        self.epsilon = 0.9
+        self.epsilon_min = 0.2
+        self.epsilon_decay = 0.8/1000
         self.gamma = 0.95
         self.learning_rate = 1e-4
         self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
-        self.memory_threshold = 250
+        self.memory_threshold = 100
         self.batch_size = 32
         self.learns = 0
         
@@ -104,7 +105,7 @@ class Agent():
             self.epsilon -= self.epsilon_decay
         self.learns += 1
         
-        if self.learns % 1000 == 0:
+        if self.learns % 100 == 0:
             self.model_target.set_weights(self.model.get_weights())
             print('\nTarget model updated')
                   
