@@ -9,7 +9,6 @@ def take_step(agent):
     agent.total_timesteps += 1
     if agent.total_timesteps % 100 == 0:
         agent.model.save_weights('recent_weights.hdf5')
-        print("Weights saved")
 
     next_state, reward, done = agent.step(agent.memory.states[-1], agent.memory.actions[-1])
     next_action = agent.get_action(next_state)
@@ -19,7 +18,6 @@ def take_step(agent):
         return (score+reward), True
 
     if len(agent.memory) > agent.memory_threshold:
-        print("Update model")
         agent.learn()
         return (score+reward), True
 
@@ -34,6 +32,5 @@ def play_episode(agent, sequences):
     while True:
         score, done = take_step(agent)
         if done:
-            print("Episode done, score: "+str(score))
             break
     return score
