@@ -9,15 +9,15 @@ import numpy as np
 class Agent():
     def __init__(self):
         self.memory = Memory(2500)
-        self.epsilon = 0.9
-        self.epsilon_min = 0.2
-        self.epsilon_decay = 0.8/1000
+        self.epsilon = 0.99
+        self.epsilon_min = 0.1
+        self.epsilon_decay = 0.9/10000
         self.gamma = 0.95
         self.learning_rate = 1e-4
         self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
-        self.memory_threshold = 100
+        self.memory_threshold = 256
         self.batch_size = 32
         self.learns = 0
         
@@ -105,7 +105,7 @@ class Agent():
             self.epsilon -= self.epsilon_decay
         self.learns += 1
         
-        if self.learns % 100 == 0:
+        if self.learns % 200 == 0:
             self.model_target.set_weights(self.model.get_weights())
             print('\nTarget model updated')
                   
