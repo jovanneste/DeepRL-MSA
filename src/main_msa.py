@@ -4,11 +4,13 @@ import environment
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+import os 
 
 dqn_agent = Agent()
 sequences = seq_generator.generate(5,5,0.2,0.4)
 scores = []
 average = []
+os.remove('recent_weights.hdf5')
 
 print(sequences)
 
@@ -28,4 +30,5 @@ for i in range(500):
 print(scores)
 plt.plot(scores)
 plt.show() 
+
 
