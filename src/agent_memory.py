@@ -25,7 +25,7 @@ class Memory():
         if len(self) < batch_size:
             raise ValueError("Insufficient experiences to sample a batch.")
 
-        indices = random.sample(range(len(self)), batch_size)
+        indices = random.sample(range(len(self)-1), batch_size)
 
         sampled_states = []
         sampled_actions = []

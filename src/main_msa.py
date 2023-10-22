@@ -1,6 +1,7 @@
 from agent import Agent
 import seq_generator
 import environment
+import numpy as np
 import matplotlib.pyplot as plt
 import time
 
@@ -15,13 +16,14 @@ for i in range(101):
     score = environment.play_episode(dqn_agent, sequences)
     scores.append(score)
     
-    print('\nEpisode: ' + str(i))
-    print('Steps: ' + str(dqn_agent.total_timesteps - timesteps))
-    print('Duration: ' + str(time.time() - timee))
-    print('Score: ' + str(score))
-    print('Epsilon: ' + str(dqn_agent.epsilon))
+    if i%100==0:
     
-    if i%100==0 and i!=0:
-        average.append(sum(scores)/len(scores))
-        plt.plot(np.arange(0,i+1,100),average)
-        plt.show()
+        print('\nEpisode: ' + str(i))
+        print('Steps: ' + str(dqn_agent.total_timesteps - timesteps))
+        print('Duration: ' + str(time.time() - timee))
+        print('Score: ' + str(score))
+        print('Epsilon: ' + str(dqn_agent.epsilon))
+
+
+plt.plot(scores)
+plt.show()
