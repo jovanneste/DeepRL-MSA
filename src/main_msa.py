@@ -5,35 +5,57 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 import os 
+import tqdm
 
 
-def main(sequence, testing=False):
+def main(sequences, training):
     dqn_agent = Agent()
-    scores = []
-    if testing:
-        dqn_agent.model.load_weights('recent_weights.hdf5')
-        dqn_agent.model_target.load_weights('recent_weights.hdf5')
-        dqn_agent.epsilon = 0.0
-    else: 
-        os.remove('recent_weights.hdf5')
-        for i in range(1000):
+    scores, average_returns = [], []
+    if training:
+        try:
+            os.remove('recent_weights.hdf5')
+        except:
+            print("No previous weights...")
+        for i in tqdm.tqdm(range(1000)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
-            score = environment.play_episode(dqn_agent, sequences)
-            scores.append(score)
+            ep_return = environment.play_episode(dqn_agent, sequences)
+            scores.append(ep_return)
+            average_returns.append(ep_return/dqn_agent.memory_threshold)
 
-            if i%200==0:  
+            if i%100==0:  
                 print('\nEpisode: ' + str(i))
                 print('Steps: ' + str(dqn_agent.total_timesteps - timesteps))
                 print('Duration: ' + str(time.time() - timee))
-                print('Score: ' + str(score))
+                print('Score: ' + str(ep_return))
+                print('Average return of action: ' + str(ep_return/dqn_agent.memory_threshold))
                 print('Epsilon: ' + str(dqn_agent.epsilon))
 
         print(scores)
         plt.plot(scores)
-        plt.show() 
-
+        plt.show()
+    else: 
+        print("Loading previous model weights...")
+        try:
+            dqn_agent.model.load_weights('recent_weights.hdf5')
+            dqn_agent.model_target.load_weights('recent_weights.hdf5')
+            dqn_agent.epsilon = 0.0
+        except:
+            print("No model weights found... exiting")
+            return
+        
+#        perform one action from trained model
+        action = dqn_agent.get_action(sequences)
+        new_state, score, done = dqn_agent.step(sequences, action)       
+        print(new_state)
+        
+        
 
 if __name__ == '__main__':
-    sequences = seq_generator.generate(5,5,0.2,0.4)
-    main(sequences)
+#    (n,l,a) tuples to represent no. sequences, length and amino acids 
+    n = 5
+    l = 5
+    a = 4
+    sequences = seq_generator.generate(n,l,0.1,0.4)
+    print(sequences)
+    main(sequences, False)
