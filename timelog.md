@@ -77,3 +77,32 @@
 
 ### 16 Oct 2023
 * *3 hours* Finish RL agent - slighly changed DQN model
+
+### 17 Oct 2023
+
+### 18 Oct 2023
+
+### 19 Oct 2023
+* *3 hours* Start RL agent training 
+
+### 20 Oct 2023
+* *5 hours* Look into saving weights for transfer learning 
+
+### 21 Oct 2023
+* *2 hours* First metrics from trained agent on 5x5s
+
+### 22 Oct 2023
+* *1 hour* RL agent hyperparameter optimisation 
+
+## Week 5
+
+### 23 Oct 2023
+* *3 hours* Look into MARL, cooperative AI
+
+### 24 Oct 2023
+* *3 hours* More research into MARL 
+* *2 hours* Work on literature review
+
+### 25 Oct 2023
+* *5 hours* Work on literature review MSA section 
+
