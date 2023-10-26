@@ -12,13 +12,9 @@ def main(sequences, training):
     dqn_agent = Agent()
     scores, average_returns = [], []
     if training:
-#        try:
-#            os.remove('recent_weights.hdf5')
-#        except:
-#            print("No previous weights...")
         dqn_agent.model.load_weights('recent_weights.hdf5')
         dqn_agent.model_target.load_weights('recent_weights.hdf5')
-        dqn_agent.epsilon = 0.0
+        
         for i in tqdm.tqdm(range(500)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
@@ -64,6 +60,7 @@ if __name__ == '__main__':
     l = 5
     a = 4
     for i in range(10):
-        print("Training on sequence " +str(i))
         sequences = seq_generator.generate(n,l,0.1,0.4)
-        main(sequences, False)
+        print("Training on sequence " +str(i))
+        print(sequences)
+        main(sequences, True)
