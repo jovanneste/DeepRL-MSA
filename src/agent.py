@@ -17,7 +17,7 @@ class Agent():
         self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
-        self.memory_threshold = 256
+        self.memory_threshold = 200
         self.batch_size = 32
         self.learns = 0
         
@@ -54,6 +54,7 @@ class Agent():
     
     def score(self, old_state, new_state):
         if (old_state==new_state).all():
+#            maybe give negative reward if new state is in memory anywhere 
             return -4
         n = new_state.shape[0]  # Assuming it's a square array
         score = 0.0
@@ -105,7 +106,7 @@ class Agent():
             self.epsilon -= self.epsilon_decay
         self.learns += 1
         
-        if self.learns % 256 == 0:
+        if self.learns % 100 == 0:
             self.model_target.set_weights(self.model.get_weights())
             print('\nTarget model updated')
                   

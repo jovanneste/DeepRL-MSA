@@ -12,11 +12,14 @@ def main(sequences, training):
     dqn_agent = Agent()
     scores, average_returns = [], []
     if training:
-        try:
-            os.remove('recent_weights.hdf5')
-        except:
-            print("No previous weights...")
-        for i in tqdm.tqdm(range(1000)):
+#        try:
+#            os.remove('recent_weights.hdf5')
+#        except:
+#            print("No previous weights...")
+        dqn_agent.model.load_weights('recent_weights.hdf5')
+        dqn_agent.model_target.load_weights('recent_weights.hdf5')
+        dqn_agent.epsilon = 0.0
+        for i in tqdm.tqdm(range(500)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
             ep_return = environment.play_episode(dqn_agent, sequences)
@@ -34,6 +37,7 @@ def main(sequences, training):
         print(scores)
         plt.plot(scores)
         plt.show()
+        
     else: 
         print("Loading previous model weights...")
         try:
@@ -44,11 +48,14 @@ def main(sequences, training):
             print("No model weights found... exiting")
             return
         
-#        perform one action from trained model
-        action = dqn_agent.get_action(sequences)
-        new_state, score, done = dqn_agent.step(sequences, action)       
-        print(new_state)
-        
+        state = sequences
+        print("Starting alignment - ")
+        print(state)
+        for i in range(10):
+            action = dqn_agent.get_action(state)
+            new_state, score, done = dqn_agent.step(state, action)       
+            print(new_state, score)
+            state = new_state
         
 
 if __name__ == '__main__':
@@ -56,6 +63,7 @@ if __name__ == '__main__':
     n = 5
     l = 5
     a = 4
-    sequences = seq_generator.generate(n,l,0.1,0.4)
-    print(sequences)
-    main(sequences, False)
+    for i in range(10):
+        print("Training on sequence " +str(i))
+        sequences = seq_generator.generate(n,l,0.1,0.4)
+        main(sequences, False)

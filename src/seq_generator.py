@@ -22,4 +22,3 @@ def generate(n_sequences, length, mutation_prob=0.2, del_prob=0.2):
 
     padded_array = np.array([row + ['_'] * (length - len(row)) for row in np.asarray(sequences, dtype=object)])
     return char_to_int(padded_array).astype(int)
-
