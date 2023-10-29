@@ -17,7 +17,7 @@ class Agent():
         self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
-        self.memory_threshold = 200
+        self.memory_threshold = 128
         self.batch_size = 32
         self.learns = 0
         
@@ -25,7 +25,7 @@ class Agent():
     def _build_model(self):
         model = Sequential()
         model.add(Input((5, 5, 1)))
-        model.add(Conv2D(filters=4, kernel_size=(3, 3), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv2D(filters=4, kernel_size=(2, 2), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Conv2D(filters=8, kernel_size=(3, 3), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Flatten())
         model.add(Dense(64, activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
@@ -106,7 +106,7 @@ class Agent():
             self.epsilon -= self.epsilon_decay
         self.learns += 1
         
-        if self.learns % 100 == 0:
+        if self.learns % 200 == 0:
             self.model_target.set_weights(self.model.get_weights())
             print('\nTarget model updated')
                   
