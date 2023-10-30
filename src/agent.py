@@ -3,7 +3,7 @@ from tensorflow.keras.models import Sequential, clone_model
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, Input
 from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
-#tf.keras.utils.disable_interactive_logging()
+tf.keras.utils.disable_interactive_logging()
 import numpy as np
 
 class Agent():
@@ -27,14 +27,15 @@ class Agent():
     def _build_model(self):
         model = Sequential()
         model.add(Input((self.no_sequences, self.seq_length, 1)))
-        model.add(Conv2D(filters=4, kernel_size=(2, 2), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        model.add(Conv2D(filters=8, kernel_size=(3, 3), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv2D(filters=16, kernel_size=(self.no_sequences, 2), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv2D(filters=32, kernel_size=(self.no_sequences, 5), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Flatten())
+        model.add(Dense(256, activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Dense(128, activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        model.add(Dense(81, activation='linear'))
+        model.add(Dense(24, activation='linear'))
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
-        model.summary()
+#        model.summary()
         print('\nAgent Initialised\n')
         return model
     
