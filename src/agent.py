@@ -11,11 +11,11 @@ class Agent():
         self.memory = Memory(2500)
         self.no_sequences = 4
         self.seq_length = 6
-        self.epsilon = 0.95
+        self.epsilon = 0.99
         self.epsilon_min = 0.1
-        self.epsilon_decay = 0.9/1000
+        self.epsilon_decay = 0.99/1000
         self.gamma = 0.95
-        self.learning_rate = 1e-4
+        self.learning_rate = 1e-3
         self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
@@ -27,7 +27,7 @@ class Agent():
     def _build_model(self):
         model = Sequential()
         model.add(Input((self.no_sequences, self.seq_length, 1)))
-        model.add(Conv2D(filters=2, kernel_size=(2, 2), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv2D(filters=8, kernel_size=(2, 2), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Conv2D(filters=4, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Flatten())
         model.add(Dense(256, activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
