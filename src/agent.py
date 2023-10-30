@@ -24,12 +24,12 @@ class Agent():
         
     def _build_model(self):
         model = Sequential()
-        model.add(Input((5, 5, 1)))
+        model.add(Input((9, 9, 1)))
         model.add(Conv2D(filters=4, kernel_size=(2, 2), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Conv2D(filters=8, kernel_size=(3, 3), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Flatten())
-        model.add(Dense(64, activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        model.add(Dense(25, activation='linear'))
+        model.add(Dense(128, activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Dense(81, activation='linear'))
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
         model.summary()
@@ -38,40 +38,43 @@ class Agent():
     
     
     def index_to_coords(self, index):
-        return (index%5, index//5)
+        return (index%9, index//9)
     
     def coords_to_index(self, coords):
         x,y = coords
-        return (y*5)+x
+        return (y*9)+x
         
     def get_action(self, state):
         if np.random.rand() < self.epsilon:
-            return (np.random.randint(0, 5), np.random.randint(0, 5))
+            return (np.random.randint(0, 9), np.random.randint(0, 9))
         
-        action_values = self.model.predict(state.reshape(1,5,5,1))
+        action_values = self.model.predict(state.reshape(1,9,9,1))
         return self.index_to_coords(np.argmax(action_values))
     
     
     def score(self, old_state, new_state):
-        if (old_state==new_state).all():
-#            maybe give negative reward if new state is in memory anywhere 
+        if (old_state == new_state).all():
             return -4
-        n = new_state.shape[0]  # Assuming it's a square array
+
+        n_rows_old, n_cols_old = old_state.shape
+        n_rows_new, n_cols_new = new_state.shape
+
         score = 0.0
 
-        for i in range(n):
-            for j in range(n):
-                for k in range(i, n):
-                    for l in range(j, n):
-                        if new_state[i, j] == 0 or new_state[k, l] == 0:
+        for i in range(n_rows_old):
+            for j in range(n_cols_old):
+                for k in range(n_rows_new):
+                    for l in range(n_cols_new):
+                        if new_state[k, l] == 0 or old_state[i, j] == 0:
                             pair_score = -0.5
-                        elif new_state[i, j] == new_state[k, l]:
+                        elif old_state[i, j] == new_state[k, l]:
                             pair_score = 1
                         else:
-                            pair_score = 0 
+                            pair_score = 0
                         score += pair_score
 
-        return score/(n*n)
+        return score / (n_rows_old * n_cols_old * n_rows_new * n_cols_new)
+
     
     
     def step(self, state, coords):
@@ -94,8 +97,8 @@ class Agent():
 
     def learn(self):
         states, next_states, actions, rewards = self.memory.sample(self.batch_size)
-        labels = self.model.predict(np.array(states).reshape(self.batch_size,5,5,1))
-        next_state_values = self.model_target.predict(np.array(next_states).reshape(self.batch_size,5,5,1))
+        labels = self.model.predict(np.array(states).reshape(self.batch_size,9,9,1))
+        next_state_values = self.model_target.predict(np.array(next_states).reshape(self.batch_size,9,9,1))
         
         for i in range(self.batch_size):
             labels[i][self.coords_to_index(actions[i])] = rewards[i] + (self.gamma * max(next_state_values[i]))
