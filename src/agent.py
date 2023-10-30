@@ -3,12 +3,14 @@ from tensorflow.keras.models import Sequential, clone_model
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, Input
 from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
-tf.keras.utils.disable_interactive_logging()
+#tf.keras.utils.disable_interactive_logging()
 import numpy as np
 
 class Agent():
     def __init__(self):
         self.memory = Memory(2500)
+        self.no_sequences = 4
+        self.seq_length = 6
         self.epsilon = 0.95
         self.epsilon_min = 0.1
         self.epsilon_decay = 0.9/1000
@@ -24,7 +26,7 @@ class Agent():
         
     def _build_model(self):
         model = Sequential()
-        model.add(Input((9, 9, 1)))
+        model.add(Input((self.no_sequences, self.seq_length, 1)))
         model.add(Conv2D(filters=4, kernel_size=(2, 2), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Conv2D(filters=8, kernel_size=(3, 3), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Flatten())
@@ -38,17 +40,17 @@ class Agent():
     
     
     def index_to_coords(self, index):
-        return (index%9, index//9)
+        return (index%self.no_sequences, index//self.seq_length)
     
     def coords_to_index(self, coords):
         x,y = coords
-        return (y*9)+x
+        return (y*self.seq_length)+x
         
     def get_action(self, state):
         if np.random.rand() < self.epsilon:
-            return (np.random.randint(0, 9), np.random.randint(0, 9))
+            return (np.random.randint(0, self.seq_length), np.random.randint(0, self.no_sequences))
         
-        action_values = self.model.predict(state.reshape(1,9,9,1))
+        action_values = self.model.predict(state.reshape(1,self.no_sequences,self.seq_length,1))
         return self.index_to_coords(np.argmax(action_values))
     
     
@@ -97,8 +99,8 @@ class Agent():
 
     def learn(self):
         states, next_states, actions, rewards = self.memory.sample(self.batch_size)
-        labels = self.model.predict(np.array(states).reshape(self.batch_size,9,9,1))
-        next_state_values = self.model_target.predict(np.array(next_states).reshape(self.batch_size,9,9,1))
+        labels = self.model.predict(np.array(states).reshape(self.batch_size,self.no_sequences,self.seq_length,1))
+        next_state_values = self.model_target.predict(np.array(next_states).reshape(self.batch_size,self.no_sequences,self.seq_length,1))
         
         for i in range(self.batch_size):
             labels[i][self.coords_to_index(actions[i])] = rewards[i] + (self.gamma * max(next_state_values[i]))

@@ -61,8 +61,8 @@ def main(sequences, training):
 
 if __name__ == '__main__':
 #    (n,l,a) tuples to represent no. sequences, length and amino acids 
-    n = 9
-    l = 9
+    n = 4
+    l = 6
     a = 4
     scores = []
     for i in range(2):
