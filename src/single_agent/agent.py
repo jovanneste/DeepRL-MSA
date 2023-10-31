@@ -32,7 +32,7 @@ class Agent():
         model.add(Flatten())
         model.add(Dense(256, activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Dense(128, activation='LeakyReLU'))
-        model.add(Dense(20, activation='linear'))
+        model.add(Dense(self.no_sequences*self.seq_length, activation='linear'))
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
 #        model.summary()
@@ -57,7 +57,7 @@ class Agent():
     
     def score(self, old_state, new_state):
         if (old_state == new_state).all():
-            return -2
+            return -4
 
         n_rows_old, n_cols_old = old_state.shape
         n_rows_new, n_cols_new = new_state.shape
