@@ -1,4 +1,4 @@
-from agent import Agent
+from single_agent.agent import Agent
 import seq_generator
 import environment
 import numpy as np
@@ -13,8 +13,8 @@ def main(sequences, training):
     scores, average_returns = [], []
     if training:
         try:
-            dqn_agent.model.load_weights('recent_weights.hdf5')
-            dqn_agent.model_target.load_weights('recent_weights.hdf5')
+            dqn_agent.model.load_weights('single_agent/recent_weights.hdf5')
+            dqn_agent.model_target.load_weights('single_agent/recent_weights.hdf5')
         except:
             print("No model weights loaded...")
         
@@ -40,8 +40,8 @@ def main(sequences, training):
     else: 
         print("Loading previous model weights...")
         try:
-            dqn_agent.model.load_weights('recent_weights.hdf5')
-            dqn_agent.model_target.load_weights('recent_weights.hdf5')
+            dqn_agent.model.load_weights('single_agent/recent_weights.hdf5')
+            dqn_agent.model_target.load_weights('single_agent/recent_weights.hdf5')
             dqn_agent.epsilon = 0.0
         except:
             print("No model weights found... exiting")
@@ -63,9 +63,9 @@ def main(sequences, training):
 
 if __name__ == '__main__':
 #    (n,l,a) tuples to represent no. sequences, length and amino acids 
-    n = 10
+    n = 2
     l = 10
-    a = 6
+    a = 3
     scores = []
     for i in range(1):
         sequences = seq_generator.generate(n,l,a,0.2,0.4)

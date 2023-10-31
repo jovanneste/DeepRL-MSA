@@ -1,4 +1,4 @@
-from agent_memory import Memory
+from single_agent.agent_memory import Memory
 from tensorflow.keras.models import Sequential, clone_model
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, Input
 from tensorflow.keras.optimizers import Adam
@@ -9,7 +9,7 @@ import numpy as np
 class Agent():
     def __init__(self):
         self.memory = Memory(2500)
-        self.no_sequences = 10
+        self.no_sequences = 2
         self.seq_length = 10
         self.epsilon = 0.99
         self.epsilon_min = 0.1
@@ -32,7 +32,7 @@ class Agent():
         model.add(Flatten())
         model.add(Dense(256, activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Dense(128, activation='LeakyReLU'))
-        model.add(Dense(100, activation='linear'))
+        model.add(Dense(20, activation='linear'))
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
 #        model.summary()
