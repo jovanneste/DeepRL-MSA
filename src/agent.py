@@ -13,13 +13,13 @@ class Agent():
         self.seq_length = 6
         self.epsilon = 0.99
         self.epsilon_min = 0.1
-        self.epsilon_decay = 0.99/1000
-        self.gamma = 0.95
-        self.learning_rate = 1e-3
+        self.epsilon_decay = 0.95/1000
+        self.gamma = 0.99
+        self.learning_rate = 1e-4
         self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
-        self.memory_threshold = 128
+        self.memory_threshold = 200
         self.batch_size = 32
         self.learns = 0
         
@@ -27,8 +27,8 @@ class Agent():
     def _build_model(self):
         model = Sequential()
         model.add(Input((self.no_sequences, self.seq_length, 1)))
-        model.add(Conv2D(filters=8, kernel_size=(2, 2), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        model.add(Conv2D(filters=4, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv2D(filters=32, kernel_size=(2, 2), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv2D(filters=64, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Flatten())
         model.add(Dense(256, activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Dense(128, activation='LeakyReLU'))
@@ -57,7 +57,7 @@ class Agent():
     
     def score(self, old_state, new_state):
         if (old_state == new_state).all():
-            return -4
+            return -2
 
         n_rows_old, n_cols_old = old_state.shape
         n_rows_new, n_cols_new = new_state.shape
@@ -81,6 +81,7 @@ class Agent():
     
     
     def step(self, state, coords):
+#        split state - sliding window heuristic 
         s_list = state.tolist()
         x, y = coords
         row = s_list[y]
@@ -112,7 +113,7 @@ class Agent():
             self.epsilon -= self.epsilon_decay
         self.learns += 1
         
-        if self.learns % 200 == 0:
+        if self.learns % 300 == 0:
             self.model_target.set_weights(self.model.get_weights())
             print('\nTarget model updated')
                   

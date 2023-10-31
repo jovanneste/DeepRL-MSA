@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 def compute_sp_score(msa):
     num_sequences = len(msa)
@@ -24,15 +25,40 @@ def compute_sp_score(msa):
 
 
 
-if __name__ == "__main__":
-    sample_msa = np.asarray([
-        [7, 20, 1, 7, 3],
-        [7, 20, 1, 0, 0],
-        [20, 1, 7, 7, 0],
-        [7, 3, 0, 0, 0],
-        [7, 20, 1, 7, 3]
-    ])
+def calculate_entropy(msa_array):
+    num_rows, num_columns = msa_array.shape
+    
+    entropies = []
+    
+    for col in range(num_columns):
+        column_data = msa_array[:, col]
+        residue_counts = dict()
+        
+        for residue in column_data:
+            if residue in residue_counts:
+                residue_counts[residue] += 1
+            else:
+                residue_counts[residue] = 1
+        
+        total_residues = num_rows
+        
+        entropy = 0
+        for count in residue_counts.values():
+            probability = count / total_residues
+            entropy -= probability * math.log2(probability)
+        
+        entropies.append(entropy)
+    
+    return sum(entropies)/len(entropies)
 
-    # Calculate the SP score
-    sp_score = compute_sp_score(sample_msa)
-    print("SP Score:", sp_score)
+msa_array = np.array([[3, 20, 1, 3, 3, 20],
+                     [3, 20, 1, 20, 0, 0],
+                     [1, 20, 3, 0, 0, 0],
+                     [3, 3, 0, 0, 0, 0]])
+
+entropies = calculate_entropy(msa_array)
+print("Entropies for each position in the MSA:")
+print(entropies)
+
+
+print(compute_sp_score(msa_array))

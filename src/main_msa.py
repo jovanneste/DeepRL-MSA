@@ -18,7 +18,7 @@ def main(sequences, training):
         except:
             print("No model weights loaded...")
         
-        for i in tqdm.tqdm(range(1500)):
+        for i in tqdm.tqdm(range(1100)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
             ep_return = environment.play_episode(dqn_agent, sequences)
@@ -50,11 +50,13 @@ def main(sequences, training):
         state = sequences
         print("Starting alignment - ")
         print(state)
-        for i in range(2):
+        for i in range(100):
             action = dqn_agent.get_action(state)
             new_state, score, done = dqn_agent.step(state, action)       
-            print(new_state, score)
+
             state = new_state
+            if i %10==0:
+                print(state)
             
         return 0
         
@@ -65,9 +67,9 @@ if __name__ == '__main__':
     l = 6
     a = 4
     scores = []
-    for i in range(2):
-        sequences = seq_generator.generate(n,l,0.2,0.4)
+    for i in range(1):
+        sequences = seq_generator.generate(n,l,0.3,0.5)
         print("Training on sequence " +str(i))
         print(sequences)
-        scores.append(main(sequences, True))
+        scores.append(main(sequences, False))
     print(scores)
