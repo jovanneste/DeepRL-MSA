@@ -63,13 +63,13 @@ def main(sequences, training):
 
 if __name__ == '__main__':
 #    (n,l,a) tuples to represent no. sequences, length and amino acids 
-    n = 4
-    l = 6
-    a = 4
+    n = 10
+    l = 10
+    a = 6
     scores = []
     for i in range(1):
-        sequences = seq_generator.generate(n,l,0.3,0.5)
+        sequences = seq_generator.generate(n,l,a,0.2,0.4)
         print("Training on sequence " +str(i))
         print(sequences)
-        scores.append(main(sequences, False))
+        scores.append(main(sequences, True))
     print(scores)

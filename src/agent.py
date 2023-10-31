@@ -9,8 +9,8 @@ import numpy as np
 class Agent():
     def __init__(self):
         self.memory = Memory(2500)
-        self.no_sequences = 4
-        self.seq_length = 6
+        self.no_sequences = 10
+        self.seq_length = 10
         self.epsilon = 0.99
         self.epsilon_min = 0.1
         self.epsilon_decay = 0.95/1000
@@ -32,7 +32,7 @@ class Agent():
         model.add(Flatten())
         model.add(Dense(256, activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Dense(128, activation='LeakyReLU'))
-        model.add(Dense(24, activation='linear'))
+        model.add(Dense(100, activation='linear'))
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
 #        model.summary()
