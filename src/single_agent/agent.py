@@ -7,10 +7,10 @@ tf.keras.utils.disable_interactive_logging()
 import numpy as np
 
 class Agent():
-    def __init__(self):
+    def __init__(self, no_seq, length):
         self.memory = Memory(2500)
-        self.no_sequences = 2
-        self.seq_length = 10
+        self.no_sequences = no_seq
+        self.seq_length = length
         self.epsilon = 0.99
         self.epsilon_min = 0.1
         self.epsilon_decay = 0.95/1000
@@ -19,7 +19,7 @@ class Agent():
         self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
-        self.memory_threshold = 200
+        self.memory_threshold = 256
         self.batch_size = 32
         self.learns = 0
         
@@ -27,11 +27,11 @@ class Agent():
     def _build_model(self):
         model = Sequential()
         model.add(Input((self.no_sequences, self.seq_length, 1)))
-        model.add(Conv2D(filters=32, kernel_size=(2, 2), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        model.add(Conv2D(filters=64, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv2D(filters=2, kernel_size=(2, 2), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv2D(filters=4, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Flatten())
-        model.add(Dense(256, activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        model.add(Dense(128, activation='LeakyReLU'))
+        model.add(Dense(128, activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Dense(64, activation='relu'))
         model.add(Dense(self.no_sequences*self.seq_length, activation='linear'))
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())

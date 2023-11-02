@@ -8,8 +8,8 @@ import os
 import tqdm
 
 
-def main(sequences, training):
-    dqn_agent = Agent()
+def main(sequences, n, l, training):
+    dqn_agent = Agent(n, l)
     scores, average_returns = [], []
     if training:
         try:
@@ -34,6 +34,19 @@ def main(sequences, training):
                 print('Epsilon: ' + str(dqn_agent.epsilon))
 
         plt.plot(scores)
+        plt.xlabel('Episode')
+        plt.ylabel('Average reward')
+        plt.show()
+        
+        
+        window_size = 10  
+        smoothed_scores = np.convolve(scores, np.ones(window_size)/window_size, mode='valid')
+
+        episode_numbers = np.arange(window_size, len(scores) + 1)
+
+        plt.plot(episode_numbers, smoothed_scores)
+        plt.xlabel('Episode')
+        plt.ylabel('Smoothed Average Reward')
         plt.show()
         return scores
         
@@ -63,13 +76,13 @@ def main(sequences, training):
 
 if __name__ == '__main__':
 #    (n,l,a) tuples to represent no. sequences, length and amino acids 
-    n = 2
-    l = 10
+    n = 6
+    l = 6
     a = 3
     scores = []
     for i in range(1):
         sequences = seq_generator.generate(n,l,a,0.2,0.4)
         print("Training on sequence " +str(i))
         print(sequences)
-        scores.append(main(sequences, True))
+        scores.append(main(sequences, n, l, True))
     print(scores)
