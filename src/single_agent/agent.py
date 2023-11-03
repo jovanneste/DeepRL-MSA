@@ -113,7 +113,7 @@ class Agent():
             self.epsilon -= self.epsilon_decay
         self.learns += 1
         
-        if self.learns % 300 == 0:
+        if self.learns % 350 == 0:
             self.model_target.set_weights(self.model.get_weights())
             print('\nTarget model updated')
                   

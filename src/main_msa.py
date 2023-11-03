@@ -18,7 +18,7 @@ def main(sequences, n, l, training):
         except:
             print("No model weights loaded...")
         
-        for i in tqdm.tqdm(range(1100)):
+        for i in tqdm.tqdm(range(2000)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
             ep_return = environment.play_episode(dqn_agent, sequences)
@@ -38,16 +38,16 @@ def main(sequences, n, l, training):
         plt.ylabel('Average reward')
         plt.show()
         
-        
-        window_size = 10  
-        smoothed_scores = np.convolve(scores, np.ones(window_size)/window_size, mode='valid')
+        for i in [10, 15, 30]:
+            window_size = i
+            smoothed_scores = np.convolve(scores, np.ones(window_size)/window_size, mode='valid')
 
-        episode_numbers = np.arange(window_size, len(scores) + 1)
+            episode_numbers = np.arange(window_size, len(scores) + 1)
 
-        plt.plot(episode_numbers, smoothed_scores)
-        plt.xlabel('Episode')
-        plt.ylabel('Smoothed Average Reward')
-        plt.show()
+            plt.plot(episode_numbers, smoothed_scores)
+            plt.xlabel('Episode')
+            plt.ylabel('Smoothed Average Reward')
+            plt.show()
         return scores
         
     else: 
