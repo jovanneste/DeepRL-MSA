@@ -15,10 +15,11 @@ def main(sequences, n, l, training):
         try:
             dqn_agent.model.load_weights('single_agent/recent_weights.hdf5')
             dqn_agent.model_target.load_weights('single_agent/recent_weights.hdf5')
+            print("Previous weights loaded...")
         except:
             print("No model weights loaded...")
         
-        for i in tqdm.tqdm(range(2000)):
+        for i in tqdm.tqdm(range(1000)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
             ep_return = environment.play_episode(dqn_agent, sequences)

@@ -8,7 +8,7 @@ import numpy as np
 
 class Agent():
     def __init__(self, no_seq, length):
-        self.memory = Memory(2500)
+        self.memory = Memory(1000)
         self.no_sequences = no_seq
         self.seq_length = length
         self.epsilon = 0.99
