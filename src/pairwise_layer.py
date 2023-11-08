@@ -28,7 +28,7 @@ class PairwiseConv1D(tf.keras.layers.Layer):
     def get_config(self):
         config = super().get_config()
         config.update({
-            "arg1": self.arg1,
-            "arg2": self.arg2,
+            "filters": self.filters,
+            "kernel_size": self.kernel_size,
         })
         return config
