@@ -40,22 +40,11 @@ class Agent():
         model.add(Conv1D(filters=self.no_sequences*self.seq_length, kernel_size=1, activation='relu', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         
         model.add(GlobalAveragePooling2D())
-        
-        
-#        model.add(Reshape((no_seq, length_seq)))
-#        
-#        
-#        model.add(Conv2D(filters=2, kernel_size=(2, 2), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-#        model.add(Conv2D(filters=4, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-#        model.add(Flatten())
-#        model.add(Dense(128, activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-#        model.add(Dense(64, activation='relu'))
-#        model.add(Dense(self.no_sequences*self.seq_length, activation='linear'))
-        
+            
         
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
-#        model.summary()
+        model.summary()
         print('\nAgent Initialised\n')
         return model
     
