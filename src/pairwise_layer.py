@@ -23,3 +23,12 @@ class PairwiseConv1D(tf.keras.layers.Layer):
         # Add a channel dimension
         output = tf.expand_dims(output, -1)
         return output
+    
+    
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            "arg1": self.arg1,
+            "arg2": self.arg2,
+        })
+        return config
