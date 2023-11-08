@@ -1,10 +1,11 @@
 from single_agent.agent_memory import Memory
 from tensorflow.keras.models import Sequential, clone_model
-from tensorflow.keras.layers import Dense, Flatten, Conv2D, Input
+from tensorflow.keras.layers import Dense, Flatten, Conv1D, Input, MaxPooling2D, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
 tf.keras.utils.disable_interactive_logging()
 import numpy as np
+from pairwise_layer import PairwiseConv1D
 
 class Agent():
     def __init__(self, no_seq, length):
@@ -27,12 +28,31 @@ class Agent():
     def _build_model(self):
         model = Sequential()
         model.add(Input((self.no_sequences, self.seq_length, 1)))
-        model.add(Conv2D(filters=2, kernel_size=(2, 2), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        model.add(Conv2D(filters=4, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        model.add(Flatten())
-        model.add(Dense(128, activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        model.add(Dense(64, activation='relu'))
-        model.add(Dense(self.no_sequences*self.seq_length, activation='linear'))
+        
+        model.add(PairwiseConv1D(filters=8, kernel_size=5))
+        
+        model.add(Conv1D(filters=32, kernel_size=3, activation='relu', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        
+        model.add(Conv1D(filters=64, kernel_size=2, activation='relu', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        
+        model.add(Conv1D(filters=self.no_sequences*self.seq_length, kernel_size=1, activation='relu', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        
+        model.add(GlobalAveragePooling2D())
+        
+        
+#        model.add(Reshape((no_seq, length_seq)))
+#        
+#        
+#        model.add(Conv2D(filters=2, kernel_size=(2, 2), activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+#        model.add(Conv2D(filters=4, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+#        model.add(Flatten())
+#        model.add(Dense(128, activation='relu', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+#        model.add(Dense(64, activation='relu'))
+#        model.add(Dense(self.no_sequences*self.seq_length, activation='linear'))
+        
+        
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
 #        model.summary()
