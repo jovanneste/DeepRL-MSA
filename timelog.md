@@ -106,3 +106,48 @@
 ### 25 Oct 2023
 * *5 hours* Work on literature review MSA section 
 
+### 26 Oct 2023
+* *3 hours* Literature review
+* *1 hour* Meeting write-up
+
+### 27 Oct 2023
+
+### 28 Oct 2023
+
+### 29 Oct 2023
+* *3 hours* Collect more data
+* *3 hours* Test with larger sequences 
+
+## Week 6
+
+### 30 Oct 2023
+
+### 31 Oct 2023
+
+### 01 Nov 2023
+* *5 hours* Work on literature review DQN section 
+
+### 02 Nov 2023
+* *2 hours* Work on literature review 
+* *2 hours* Meeting
+* *1 hour* Meeting write-up
+
+### 01 Nov 2023
+* *5 hours* Look into creating a new layer 
+
+### 02 Nov 2023
+
+### 03 Nov 2023
+
+### 04 Nov 2023
+* *2 hours* Start work on new layer - created pairwise kernel 
+
+### 05 Nov 2023
+* *3 hours* Work on literature review 
+
+### 06 Nov 2023
+* *2 hours* Reseach into real data sets to use 
+
+### 07 Nov 2023
+* *2 hours* New network created with new layer 
+* *1 hour* Think about whether to use FC layers
