@@ -19,7 +19,7 @@ def main(sequences, n, l, training):
         except:
             print("No model weights loaded...")
         
-        for i in tqdm.tqdm(range(2)):
+        for i in tqdm.tqdm(range(1000)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
             ep_return = environment.play_episode(dqn_agent, sequences)
