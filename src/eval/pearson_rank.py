@@ -18,20 +18,26 @@ def step(state, coords):
             row.insert(x, 0)
 
     new_state = np.array(s_list).reshape(state.shape)
-    return scoring.compute_sp_score(new_state)
+    return new_state, scoring.compute_sp_score(new_state)
 
 
 
-state = np.asarray([[1,0,5,4],
-                  [2,5,4,0],
-                  [1,2,5,0]])
+state = np.asarray([[0,1,2,3,4],
+                    [1,2,3,4,5],
+                    [1,2,3,4,5],
+                    [1,2,3,4,5],
+                    [1,2,3,4,5]])
 
 
 action_scores = {}
 
 for iy, ix in np.ndindex(state.shape):
     coords = (ix,iy)
-    action_scores[coords] = step(state, coords)
+    print("-------------")
+    print(coords, state[iy, ix])
+
+    new_state, action_scores[coords] = step(state, coords)
+    print(new_state,  action_scores[coords])
 
 action_scores = sorted(action_scores.items(), key=lambda x:x[1], reverse=True)
 sorted_action_scores = dict(action_scores)

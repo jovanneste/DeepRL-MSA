@@ -20,7 +20,7 @@ def compute_sp_score(msa):
     total_pairs = num_sequences * (num_sequences - 1) * sequence_length
     sp_score /= total_pairs
 
-    return sp_score
+    return 1-sp_score
 
 
 
