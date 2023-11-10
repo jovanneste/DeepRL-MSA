@@ -46,8 +46,8 @@ input_coord = (0, 0)
 values = list(sorted_action_scores.values())
 
 # Calculate the percentile of the input coordinate
-percentile = percentileofscore(values, sorted_action_scores[input_coord])
-print(percentile)
+percentile = 100 - percentileofscore(values, sorted_action_scores[input_coord])
+print("Per", percentile)
 
 
 # normal chosen action 
@@ -55,20 +55,20 @@ print(percentile)
 # random chosen action 
 
 # repeat for differnent sizes - get percentages HISTOGRAMS
-
-random_per = [15, 59, 35, 23, 66]
-normal_model_per = [55, 77, 34, 81, 81]
-new_model_per = [98, 98, 78, 88, 84]
-
-plt.hist(random_per, bins=5, alpha=0.5, label='Dataset 1', edgecolor='black')
-plt.hist(normal_model_per, bins=5, alpha=0.5, label='Dataset 2', edgecolor='black')
-plt.hist(new_model_per, bins=5, alpha=0.5, label='Dataset 3', edgecolor='black')
-
-# Add labels and title
-plt.title("Histograms of Datasets")
-plt.xlabel("Values")
-plt.ylabel("Frequency")
-plt.legend()
-
-# Show the plot
-plt.show()
+#
+#random_per = [15, 59, 35, 23, 66]
+#normal_model_per = [55, 77, 34, 81, 81]
+#new_model_per = [98, 98, 78, 88, 84]
+#
+#plt.hist(random_per, bins=5, alpha=0.5, label='Dataset 1', edgecolor='black')
+#plt.hist(normal_model_per, bins=5, alpha=0.5, label='Dataset 2', edgecolor='black')
+#plt.hist(new_model_per, bins=5, alpha=0.5, label='Dataset 3', edgecolor='black')
+#
+## Add labels and title
+#plt.title("Histograms of Datasets")
+#plt.xlabel("Values")
+#plt.ylabel("Frequency")
+#plt.legend()
+#
+## Show the plot
+#plt.show()

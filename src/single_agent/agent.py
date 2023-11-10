@@ -49,6 +49,22 @@ class Agent():
         return model
     
     
+    def _build_old_model(self):
+        model = Sequential()
+        model.add(Input((self.no_sequences, self.seq_length, 1)))
+        model.add(Conv2D(filters=32, kernel_size=(2, 2), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv2D(filters=64, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Flatten())
+        model.add(Dense(256, activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Dense(128, activation='LeakyReLU'))
+        model.add(Dense(self.no_sequences*self.seq_length, activation='linear'))
+        optimizer = Adam(learning_rate=self.learning_rate)
+        model.compile(optimizer, loss=tf.keras.losses.Huber())
+#        model.summary()
+        print('\nAgent Initialised\n')
+        return model
+    
+    
     def index_to_coords(self, index):
         return (index%self.no_sequences, index//self.seq_length)
     

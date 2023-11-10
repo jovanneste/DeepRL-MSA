@@ -39,7 +39,7 @@ def main(sequences, n, l, training):
         plt.ylabel('Average reward')
         plt.show()
         
-        for i in [10, 15, 30]:
+        for i in [10, 15, 30, 50]:
             window_size = i
             smoothed_scores = np.convolve(scores, np.ones(window_size)/window_size, mode='valid')
 
@@ -77,12 +77,12 @@ def main(sequences, n, l, training):
 
 if __name__ == '__main__':
 #    (n,l,a) tuples to represent no. sequences, length and amino acids 
-    n = 16
-    l = 12
+    n = 6
+    l = 6
     a = 4
     scores = []
     for i in range(1):
-        sequences = seq_generator.generate(n,l,a,0.2,0.2)
+        sequences = seq_generator.generate(n,l,a,0.2,0.4)
         print("Training on sequence " +str(i))
         print(sequences)
         scores.append(main(sequences, n, l, True))
