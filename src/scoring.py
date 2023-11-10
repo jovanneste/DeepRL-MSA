@@ -50,15 +50,3 @@ def calculate_entropy(msa_array):
         entropies.append(entropy)
     
     return sum(entropies)/len(entropies)
-
-msa_array = np.array([[3, 20, 1, 3, 3, 20],
-                     [3, 20, 1, 20, 0, 0],
-                     [1, 20, 3, 0, 0, 0],
-                     [3, 3, 0, 0, 0, 0]])
-
-entropies = calculate_entropy(msa_array)
-print("Entropies for each position in the MSA:")
-print(entropies)
-
-
-print(compute_sp_score(msa_array))

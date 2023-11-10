@@ -103,11 +103,7 @@ class Agent():
                     row.pop(row.index(0))
                     row.insert(x, 0)
         except:
-            print("SHHHHITTT!!!!")
-            print(state)
-            print(coords)
-            print("-------")
-            exit()
+            return state, -10, False
 
         new_state = np.array(s_list).reshape(state.shape)
 #        needs to return done too
