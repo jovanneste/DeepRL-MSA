@@ -18,7 +18,7 @@ def step(state, coords):
             row.insert(x, 0)
 
     new_state = np.array(s_list).reshape(state.shape)
-    return new_state, scoring.compute_sp_score(new_state)
+    return scoring.compute_sp_score(new_state)
 
 
 
@@ -33,11 +33,8 @@ action_scores = {}
 
 for iy, ix in np.ndindex(state.shape):
     coords = (ix,iy)
-    print("-------------")
-    print(coords, state[iy, ix])
+    action_scores[coords] = step(state, coords)
 
-    new_state, action_scores[coords] = step(state, coords)
-    print(new_state,  action_scores[coords])
 
 action_scores = sorted(action_scores.items(), key=lambda x:x[1], reverse=True)
 sorted_action_scores = dict(action_scores)
