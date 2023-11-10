@@ -27,5 +27,13 @@ state = np.asarray([[1,0,5,4],
                   [1,2,5,0]])
 
 
+action_scores = {}
+
 for iy, ix in np.ndindex(state.shape):
-    print((ix,iy), step(state, (ix,iy)))
+    coords = (ix,iy)
+    action_scores[coords] = step(state, coords)
+
+action_scores = sorted(action_scores.items(), key=lambda x:x[1], reverse=True)
+sorted_action_scores = dict(action_scores)
+
+print(sorted_action_scores)
