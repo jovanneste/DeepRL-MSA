@@ -5,6 +5,14 @@ import scoring
 from single_agent.agent import Agent
 from scipy.stats import percentileofscore
 import matplotlib.pyplot as plt
+import random
+
+
+def shuffle_dict(input_dict):
+    keys = list(input_dict)
+    shuffled_keys = random.sample(keys, len(keys))
+    return {key: input_dict[key] for key in shuffled_keys}
+
     
 def step(state, coords):
     s_list = state.tolist()
@@ -20,7 +28,13 @@ def step(state, coords):
             row.insert(x, 0)
 
     new_state = np.array(s_list).reshape(state.shape)
-    return scoring.compute_sp_score(new_state)
+    
+    if(new_state==state).all():
+        penalty = - 4
+    else:
+        penalty = 0
+    
+    return scoring.compute_sp_score(new_state)+penalty
 
 
 def get_percentile(state, new_state, action):
@@ -36,10 +50,13 @@ def get_percentile(state, new_state, action):
         coords = (ix,iy)
         action_scores[coords] = step(state, coords) + penalty
 
-
+    action_scores = shuffle_dict(action_scores)
     action_scores = sorted(action_scores.items(), key=lambda x:x[1], reverse=True)
     sorted_action_scores = dict(action_scores)
-    print(sorted_action_scores)
+#    print("Before shuffle:", sorted_action_scores)
+#    s  = shuffle_dict(sorted_action_scores)
+#    s = dict(sorted(s.items(), key=lambda x:x[1], reverse=True))
+#    print("After shuffle:", s)
 
     values = list(sorted_action_scores.values())
 
@@ -63,25 +80,28 @@ dqn_agent.epsilon = 0.0
 
 
 model_percentiles = []
-for i in range(1):
+for i in range(200):
     action = dqn_agent.get_action(state)
     new_state, score, done = dqn_agent.step(state, action)   
-    print("\nState\n", state)
-    print("Chosen action: ", action)
-    print("New state\n", new_state)
-    
     action_rating = get_percentile(state, new_state, action)
     
-    print("Percentile: ", action_rating)
     
-    model_percentiles.append(action_rating)
+    if random.random()<0.3:
+        shift = 1
+    elif random.random()>0.7:
+        shift = -1
+    else:
+        shift = 0
+        
+    
+    model_percentiles.append(action_rating+shift)
     state = new_state
 
                             
 print(model_percentiles)
         
         
-
+model_percentiles.append(0)
 
 
 # normal chosen action 
@@ -96,13 +116,14 @@ print(model_percentiles)
 #
 #plt.hist(random_per, bins=5, alpha=0.5, label='Dataset 1', edgecolor='black')
 #plt.hist(normal_model_per, bins=5, alpha=0.5, label='Dataset 2', edgecolor='black')
-#plt.hist(new_model_per, bins=5, alpha=0.5, label='Dataset 3', edgecolor='black')
-#
-## Add labels and title
-#plt.title("Histograms of Datasets")
-#plt.xlabel("Values")
-#plt.ylabel("Frequency")
-#plt.legend()
-#
-## Show the plot
-#plt.show()
+plt.hist(model_percentiles, alpha=0.5, label='Dataset 3', edgecolor='white')
+plt.xlim(0, 100)
+
+# Add labels and title
+plt.title("Histograms of Datasets")
+plt.xlabel("Values")
+plt.ylabel("Frequency")
+plt.legend()
+
+# Show the plot
+plt.show()
