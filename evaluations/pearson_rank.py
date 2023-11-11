@@ -23,6 +23,33 @@ def step(state, coords):
     return scoring.compute_sp_score(new_state)
 
 
+def get_percentile(state, new_state, action):
+    action_scores = {}
+    if (state==new_state).all():
+        penalty = -4
+    else:
+        penalty = 0
+        
+    print("Penalty: ", penalty)
+
+    for iy, ix in np.ndindex(state.shape):
+        coords = (ix,iy)
+        action_scores[coords] = step(state, coords) + penalty
+
+
+    action_scores = sorted(action_scores.items(), key=lambda x:x[1], reverse=True)
+    sorted_action_scores = dict(action_scores)
+    print(sorted_action_scores)
+
+    values = list(sorted_action_scores.values())
+
+    return 100 - percentileofscore(values, sorted_action_scores[action])
+
+
+
+
+
+
 
 state = np.asarray([[9,23,1,5,9,9],
                     [9,5,1,0,0,0],
@@ -37,36 +64,23 @@ dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
 dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
 dqn_agent.epsilon = 0.0
 
-print("Starting alignment - ")
-print(state)
+
+model_percentiles = []
 for i in range(1):
     action = dqn_agent.get_action(state)
+    new_state, score, done = dqn_agent.step(state, action)   
+    print(state)
+    print(new_state)
     print("Chosen action: ", action)
-    new_state, score, done = dqn_agent.step(state, action)       
-
+    model_percentiles.append(get_percentile(state, new_state, action))
+    
     state = new_state
 
-                
-exit()             
+                            
+print(model_percentiles)
+        
+        
 
-action_scores = {}
-
-for iy, ix in np.ndindex(state.shape):
-    coords = (ix,iy)
-    action_scores[coords] = step(state, coords)
-
-
-action_scores = sorted(action_scores.items(), key=lambda x:x[1], reverse=True)
-sorted_action_scores = dict(action_scores)
-
-input_coord = (0, 0)
-
-# Extract values from the dictionary
-values = list(sorted_action_scores.values())
-
-# Calculate the percentile of the input coordinate
-percentile = 100 - percentileofscore(values, sorted_action_scores[input_coord])
-print("Per", percentile)
 
 
 # normal chosen action 
