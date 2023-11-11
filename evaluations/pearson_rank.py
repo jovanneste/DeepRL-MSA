@@ -2,6 +2,7 @@ import numpy as np
 import sys
 sys.path.append('../src')
 import scoring
+from single_agent.agent import Agent
 from scipy.stats import percentileofscore
 import matplotlib.pyplot as plt
     
@@ -23,12 +24,30 @@ def step(state, coords):
 
 
 
-state = np.asarray([[0,1,2,3,4],
-                    [1,2,3,4,5],
-                    [1,2,3,4,5],
-                    [1,2,3,4,5],
-                    [1,2,3,4,5]])
+state = np.asarray([[9,23,1,5,9,9],
+                    [9,5,1,0,0,0],
+                    [23,9,9,0,0,0],
+                    [5,9,9,5,9,9],
+                    [23,5,9,0,0,0],
+                    [9,9,9,0,0,0]])
 
+
+dqn_agent = Agent(6, 6)
+dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
+dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
+dqn_agent.epsilon = 0.0
+
+print("Starting alignment - ")
+print(state)
+for i in range(1):
+    action = dqn_agent.get_action(state)
+    print("Chosen action: ", action)
+    new_state, score, done = dqn_agent.step(state, action)       
+
+    state = new_state
+
+                
+exit()             
 
 action_scores = {}
 
