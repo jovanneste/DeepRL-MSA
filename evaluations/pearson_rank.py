@@ -48,9 +48,6 @@ def get_percentile(state, new_state, action):
 
 
 
-
-
-
 state = np.asarray([[9,23,1,5,9,9],
                     [9,5,1,0,0,0],
                     [23,9,9,0,0,0],
@@ -69,11 +66,15 @@ model_percentiles = []
 for i in range(1):
     action = dqn_agent.get_action(state)
     new_state, score, done = dqn_agent.step(state, action)   
-    print(state)
-    print(new_state)
+    print("\nState\n", state)
     print("Chosen action: ", action)
-    model_percentiles.append(get_percentile(state, new_state, action))
+    print("New state\n", new_state)
     
+    action_rating = get_percentile(state, new_state, action)
+    
+    print("Percentile: ", action_rating)
+    
+    model_percentiles.append(action_rating)
     state = new_state
 
                             
