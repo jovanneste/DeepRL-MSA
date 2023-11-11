@@ -43,8 +43,6 @@ def get_percentile(state, new_state, action):
         penalty = -4
     else:
         penalty = 0
-        
-    print("Penalty: ", penalty)
 
     for iy, ix in np.ndindex(state.shape):
         coords = (ix,iy)
@@ -53,10 +51,6 @@ def get_percentile(state, new_state, action):
     action_scores = shuffle_dict(action_scores)
     action_scores = sorted(action_scores.items(), key=lambda x:x[1], reverse=True)
     sorted_action_scores = dict(action_scores)
-#    print("Before shuffle:", sorted_action_scores)
-#    s  = shuffle_dict(sorted_action_scores)
-#    s = dict(sorted(s.items(), key=lambda x:x[1], reverse=True))
-#    print("After shuffle:", s)
 
     values = list(sorted_action_scores.values())
 
@@ -98,11 +92,6 @@ for i in range(200):
     state = new_state
 
                             
-print(model_percentiles)
-        
-        
-model_percentiles.append(0)
-
 
 # normal chosen action 
 # new netork chosen action 
