@@ -11,7 +11,12 @@ def plot_percentiles(model_percentiles):
     plt.legend()
     plt.show()
 
-#model_percentiles = []
+    
+def percentage_greater_than(lst, x):
+    count_greater_than_x = sum(1 for item in lst if item < x)
+    percentage = (count_greater_than_x / len(lst)) * 100
+    
+    return percentage
     
 
 try:
@@ -25,5 +30,4 @@ except Exception as e:
 
 
 
-
-plot_percentiles(loaded_array)
+print(percentage_greater_than(loaded_array, 20))
