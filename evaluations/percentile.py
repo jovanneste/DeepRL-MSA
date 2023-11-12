@@ -72,14 +72,14 @@ def get_percentile(state, new_state, action):
     return (random.choice(indices)/len(shuffled))*100
 
 
-def get_model_action_percentiles(state, n_steps, random_actions=False):
+def get_model_action_percentiles(state, n_steps, random_actions):
     dqn_agent = Agent(10, 10)
     dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
     dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
     if random_actions:
-        dqn_agent.epsilon = 0
-    else:
         dqn_agent.epsilon = 1
+    else:
+        dqn_agent.epsilon = 0
         
     model_percentiles = []
     for i in tqdm.tqdm(range(n_steps)):
@@ -90,16 +90,21 @@ def get_model_action_percentiles(state, n_steps, random_actions=False):
         model_percentiles.append(action_rating)
         state = new_state
         
-    with open('10x10percentiles.pkl', 'wb') as file:
-        pickle.dump(model_percentiles, file)
-
-    print('Array dumped to file successfully.')
+    if random_actions:
+        with open('10x10percentilesRANDOM.pkl', 'wb') as file:
+            pickle.dump(model_percentiles, file)
+        print('Array dumped to file successfully.')
+    else:
+        with open('10x10percentiles.pkl', 'wb') as file:
+            pickle.dump(model_percentiles, file)
+        print('Array dumped to file successfully.')
+        
     return model_percentiles
 
 
 
 def plot_percentiles(model_percentiles):
-    plt.hist(model_percentiles, bins = 5, alpha=0.5, label='Dataset 3', edgecolor='white')
+    plt.hist(model_percentiles, alpha=0.5, label='Dataset 3', edgecolor='white')
     plt.xlim(0, 100)
     plt.title("Histograms of Datasets")
     plt.xlabel("Values")
@@ -123,5 +128,5 @@ state = np.asarray([[ 1 , 1,  1, 23,  5,  5,  1,  5, 23, 23],
 
 
 
-model_percentiles = get_model_action_percentiles(state,  10)
-print(model_percentiles)
+model_percentiles = get_model_action_percentiles(state, 10, False)
+plot_percentiles(model_percentiles)
