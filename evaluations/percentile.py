@@ -3,7 +3,6 @@ import sys
 sys.path.append('../src')
 import scoring
 from single_agent.agent import Agent
-import matplotlib.pyplot as plt
 import random
 import tqdm 
 import pickle
@@ -98,18 +97,6 @@ def get_model_action_percentiles(state, n_steps, random_actions):
         print('Array dumped to file successfully.')
         
     return model_percentiles
-
-
-def plot_percentiles(model_percentiles):
-    plt.hist(model_percentiles, alpha=0.5, label='Dataset 3', edgecolor='white')
-    plt.xlim(0, 100)
-    plt.title("Histograms of Datasets")
-    plt.xlabel("Values")
-    plt.ylabel("Frequency")
-    plt.legend()
-    plt.show()
-
-    
     
 
 state = np.asarray([[ 1 , 1,  1, 23,  5,  5,  1,  5, 23, 23],
@@ -125,5 +112,7 @@ state = np.asarray([[ 1 , 1,  1, 23,  5,  5,  1,  5, 23, 23],
 
 
 
-model_percentiles = get_model_action_percentiles(state, 10, False)
+model_percentiles = get_model_action_percentiles(state, 1000, True)
+plot_percentiles(model_percentiles)
+model_percentiles = get_model_action_percentiles(state, 1000, False)
 plot_percentiles(model_percentiles)
