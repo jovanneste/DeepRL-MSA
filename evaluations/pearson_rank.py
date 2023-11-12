@@ -8,10 +8,28 @@ import matplotlib.pyplot as plt
 import random
 
 
-def shuffle_dict(input_dict):
-    keys = list(input_dict)
-    shuffled_keys = random.sample(keys, len(keys))
-    return {key: input_dict[key] for key in shuffled_keys}
+def split_and_shuffle(dictionary):
+    # Create a dictionary to store subdictionaries based on values
+    sub_dictionaries = {}
+
+    # Split the input dictionary into subdictionaries based on values
+    for key, value in dictionary.items():
+        if value not in sub_dictionaries:
+            sub_dictionaries[value] = {key: value}
+        else:
+            sub_dictionaries[value][key] = value
+
+    print(sub_dictionaries)
+    result_dictionary = {}
+    # Shuffle each subdictionary
+    for sub_dict in sub_dictionaries.values():
+        keys = list(sub_dict.keys())
+        random.shuffle(keys)
+        sub_dict = {key: sub_dict[key] for key in keys}
+
+        result_dictionary.update(sub_dict)
+
+    return result_dictionary
 
     
 def step(state, coords):
@@ -48,9 +66,10 @@ def get_percentile(state, new_state, action):
         coords = (ix,iy)
         action_scores[coords] = step(state, coords) + penalty
 
-    action_scores = shuffle_dict(action_scores)
     action_scores = sorted(action_scores.items(), key=lambda x:x[1], reverse=True)
     sorted_action_scores = dict(action_scores)
+    print(sorted_action_scores)
+    print(split_and_shuffle(sorted_action_scores))
 
     values = list(sorted_action_scores.values())
 
@@ -74,21 +93,14 @@ dqn_agent.epsilon = 0.0
 
 
 model_percentiles = []
-for i in range(200):
+for i in range(1):
     action = dqn_agent.get_action(state)
     new_state, score, done = dqn_agent.step(state, action)   
     action_rating = get_percentile(state, new_state, action)
+    print(action_rating)
+
     
-    
-    if random.random()<0.3:
-        shift = 1
-    elif random.random()>0.7:
-        shift = -1
-    else:
-        shift = 0
-        
-    
-    model_percentiles.append(action_rating+shift)
+    model_percentiles.append(action_rating)
     state = new_state
 
                             
