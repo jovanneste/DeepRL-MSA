@@ -6,7 +6,7 @@ from single_agent.agent import Agent
 from scipy.stats import percentileofscore
 import matplotlib.pyplot as plt
 import random
-
+import tqdm 
 
 def split_and_shuffle(dictionary):
     # Create a dictionary to store subdictionaries based on values
@@ -19,7 +19,6 @@ def split_and_shuffle(dictionary):
         else:
             sub_dictionaries[value][key] = value
 
-    print(sub_dictionaries)
     result_dictionary = {}
     # Shuffle each subdictionary
     for sub_dict in sub_dictionaries.values():
@@ -68,12 +67,16 @@ def get_percentile(state, new_state, action):
 
     action_scores = sorted(action_scores.items(), key=lambda x:x[1], reverse=True)
     sorted_action_scores = dict(action_scores)
-    print(sorted_action_scores)
-    print(split_and_shuffle(sorted_action_scores))
 
-    values = list(sorted_action_scores.values())
+    
+    shuffled = split_and_shuffle(sorted_action_scores)
+    
 
-    return 100 - percentileofscore(values, sorted_action_scores[action])
+
+
+    values = list(shuffled.values())
+
+    return 100 - percentileofscore(values, shuffled[action])
 
 
 
@@ -93,11 +96,10 @@ dqn_agent.epsilon = 0.0
 
 
 model_percentiles = []
-for i in range(1):
+for i in tqdm.tqdm(range(100)):
     action = dqn_agent.get_action(state)
     new_state, score, done = dqn_agent.step(state, action)   
     action_rating = get_percentile(state, new_state, action)
-    print(action_rating)
 
     
     model_percentiles.append(action_rating)
