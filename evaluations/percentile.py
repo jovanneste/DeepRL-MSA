@@ -8,9 +8,9 @@ import random
 import tqdm 
 import pickle
 
+
 def split_and_shuffle(dictionary):
     sub_dictionaries = {}
-
     for key, value in dictionary.items():
         if value not in sub_dictionaries:
             sub_dictionaries[value] = {key: value}
@@ -22,9 +22,7 @@ def split_and_shuffle(dictionary):
         keys = list(sub_dict.keys())
         random.shuffle(keys)
         sub_dict = {key: sub_dict[key] for key in keys}
-
         result_dictionary.update(sub_dict)
-
     return result_dictionary
 
     
@@ -102,7 +100,6 @@ def get_model_action_percentiles(state, n_steps, random_actions):
     return model_percentiles
 
 
-
 def plot_percentiles(model_percentiles):
     plt.hist(model_percentiles, alpha=0.5, label='Dataset 3', edgecolor='white')
     plt.xlim(0, 100)
@@ -110,9 +107,10 @@ def plot_percentiles(model_percentiles):
     plt.xlabel("Values")
     plt.ylabel("Frequency")
     plt.legend()
-
     plt.show()
 
+    
+    
 
 state = np.asarray([[ 1 , 1,  1, 23,  5,  5,  1,  5, 23, 23],
  [ 1,  1,  5, 23, 23,  0,  0,  0,  0,  0],
@@ -124,7 +122,6 @@ state = np.asarray([[ 1 , 1,  1, 23,  5,  5,  1,  5, 23, 23],
  [23,  1,  1,  5,  1,  5, 23,  0,  0,  0],
  [ 1,  7,  5,  1,  7,  0,  0,  0,  0,  0],
  [ 1, 23, 23,  5, 23, 23,  0,  0,  0,  0]])
-
 
 
 
