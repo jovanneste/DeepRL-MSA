@@ -74,7 +74,6 @@ def get_percentile(state, new_state, action):
 
 
 def get_model_action_percentiles(state, n_steps):
-
     dqn_agent = Agent(10, 10)
     dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
     dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
@@ -100,14 +99,11 @@ def get_model_action_percentiles(state, n_steps):
 def plot_percentiles(model_percentiles):
     plt.hist(model_percentiles, bins = 5, alpha=0.5, label='Dataset 3', edgecolor='white')
     plt.xlim(0, 100)
-
-    # Add labels and title
     plt.title("Histograms of Datasets")
     plt.xlabel("Values")
     plt.ylabel("Frequency")
     plt.legend()
 
-    # Show the plot
     plt.show()
 
 
@@ -118,8 +114,12 @@ state = np.asarray([[ 1 , 1,  1, 23,  5,  5,  1,  5, 23, 23],
  [ 1,  1,  1,  1,  5,  1,  5, 23, 23,  0],
  [23,  1,  1, 23,  5,  1, 23,  0,  0,  0],
  [ 1,  5,  5,  7, 23, 23,  0,  0,  0,  0],
- [23,  0,  0,  0,  7,  23, 5,  0,  0,  0],
+ [23,  1,  1,  5,  1,  5, 23,  0,  0,  0],
  [ 1,  7,  5,  1,  7,  0,  0,  0,  0,  0],
  [ 1, 23, 23,  5, 23, 23,  0,  0,  0,  0]])
 
 
+
+
+model_percentiles = get_model_action_percentiles(state,  10)
+print(model_percentiles)
