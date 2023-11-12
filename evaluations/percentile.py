@@ -72,13 +72,15 @@ def get_percentile(state, new_state, action):
     return (random.choice(indices)/len(shuffled))*100
 
 
-
-def get_model_action_percentiles(state, n_steps):
+def get_model_action_percentiles(state, n_steps, random_actions=False):
     dqn_agent = Agent(10, 10)
     dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
     dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
-    dqn_agent.epsilon = 0.0
-
+    if random_actions:
+        dqn_agent.epsilon = 0
+    else:
+        dqn_agent.epsilon = 1
+        
     model_percentiles = []
     for i in tqdm.tqdm(range(n_steps)):
         action = dqn_agent.get_action(state)
