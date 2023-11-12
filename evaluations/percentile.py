@@ -7,12 +7,11 @@ from scipy.stats import percentileofscore
 import matplotlib.pyplot as plt
 import random
 import tqdm 
+import pickle
 
 def split_and_shuffle(dictionary):
-    # Create a dictionary to store subdictionaries based on values
     sub_dictionaries = {}
 
-    # Split the input dictionary into subdictionaries based on values
     for key, value in dictionary.items():
         if value not in sub_dictionaries:
             sub_dictionaries[value] = {key: value}
@@ -20,7 +19,6 @@ def split_and_shuffle(dictionary):
             sub_dictionaries[value][key] = value
 
     result_dictionary = {}
-    # Shuffle each subdictionary
     for sub_dict in sub_dictionaries.values():
         keys = list(sub_dict.keys())
         random.shuffle(keys)
@@ -67,13 +65,7 @@ def get_percentile(state, new_state, action):
 
     action_scores = sorted(action_scores.items(), key=lambda x:x[1], reverse=True)
     sorted_action_scores = dict(action_scores)
-
-    
     shuffled = split_and_shuffle(sorted_action_scores)
-    
-
-
-
     values = list(shuffled.values())
 
     return 100 - percentileofscore(values, shuffled[action])
@@ -105,7 +97,18 @@ for i in tqdm.tqdm(range(100)):
     model_percentiles.append(action_rating)
     state = new_state
 
-                            
+            
+with open('6x6percentiles.pkl', 'wb') as file:
+    pickle.dump(model_percentiles, file)
+
+print('Array dumped to file successfully.')
+
+# Loading the array from the file
+#with open('array_data.pkl', 'rb') as file:
+#    loaded_array = pickle.load(file)
+#
+#print('Array loaded from file:', loaded_array)      
+        
 
 # normal chosen action 
 # new netork chosen action 
@@ -119,14 +122,14 @@ for i in tqdm.tqdm(range(100)):
 #
 #plt.hist(random_per, bins=5, alpha=0.5, label='Dataset 1', edgecolor='black')
 #plt.hist(normal_model_per, bins=5, alpha=0.5, label='Dataset 2', edgecolor='black')
-plt.hist(model_percentiles, alpha=0.5, label='Dataset 3', edgecolor='white')
-plt.xlim(0, 100)
-
-# Add labels and title
-plt.title("Histograms of Datasets")
-plt.xlabel("Values")
-plt.ylabel("Frequency")
-plt.legend()
-
-# Show the plot
-plt.show()
+#plt.hist(model_percentiles, alpha=0.5, label='Dataset 3', edgecolor='white')
+#plt.xlim(0, 100)
+#
+## Add labels and title
+#plt.title("Histograms of Datasets")
+#plt.xlabel("Values")
+#plt.ylabel("Frequency")
+#plt.legend()
+#
+## Show the plot
+#plt.show()
