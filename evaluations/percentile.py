@@ -68,37 +68,44 @@ def get_percentile(state, new_state, action):
     shuffled = split_and_shuffle(sorted_action_scores)
     values = list(shuffled.values())
 
-    return 100 - percentileofscore(values, shuffled[action])
+    indices = [index for index, value in enumerate(list(values)) if value == shuffled[action]]
+
+    return (random.choice(indices)/len(shuffled))*100
 
 
 
 
-state = np.asarray([[9,23,1,5,9,9],
-                    [9,5,1,0,0,0],
-                    [23,9,9,0,0,0],
-                    [5,9,9,5,9,9],
-                    [23,5,9,0,0,0],
-                    [9,9,9,0,0,0]])
+state = np.asarray([[ 1 , 1,  1, 23,  5,  5,  1,  5, 23, 23],
+ [ 1,  1,  5, 23, 23,  0,  0,  0,  0,  0],
+ [ 1,  1,  1,  5,  0,  0,  0,  0,  0,  0],
+ [ 1,  5,  1,  5, 23,  0,  0,  0,  0,  0],
+ [ 1,  1,  1,  1,  5,  1,  5, 23, 23,  0],
+ [23,  1,  1, 23,  5,  1, 23,  0,  0,  0],
+ [ 1,  5,  5,  7, 23, 23,  0,  0,  0,  0],
+ [23,  1,  1,  5,  1,  5, 23,  0,  0,  0],
+ [ 1,  7,  5,  1,  7,  0,  0,  0,  0,  0],
+ [ 1, 23, 23,  5, 23, 23,  0,  0,  0,  0]])
 
+print(state.shape)
 
-dqn_agent = Agent(6, 6)
+dqn_agent = Agent(10, 10)
 dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
 dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
 dqn_agent.epsilon = 0.0
 
 
 model_percentiles = []
-for i in tqdm.tqdm(range(100)):
+for i in tqdm.tqdm(range(1)):
     action = dqn_agent.get_action(state)
     new_state, score, done = dqn_agent.step(state, action)   
     action_rating = get_percentile(state, new_state, action)
 
-    
+
     model_percentiles.append(action_rating)
     state = new_state
 
-            
-with open('6x6percentiles.pkl', 'wb') as file:
+print(model_percentiles)            
+with open('10x10percentiles.pkl', 'wb') as file:
     pickle.dump(model_percentiles, file)
 
 print('Array dumped to file successfully.')
@@ -122,7 +129,7 @@ print('Array dumped to file successfully.')
 #
 #plt.hist(random_per, bins=5, alpha=0.5, label='Dataset 1', edgecolor='black')
 #plt.hist(normal_model_per, bins=5, alpha=0.5, label='Dataset 2', edgecolor='black')
-#plt.hist(model_percentiles, alpha=0.5, label='Dataset 3', edgecolor='white')
+#plt.hist(model_percentiles, bins=20, alpha=0.5, label='Dataset 3', edgecolor='white')
 #plt.xlim(0, 100)
 #
 ## Add labels and title
