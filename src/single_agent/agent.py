@@ -1,6 +1,6 @@
 from single_agent.agent_memory import Memory
 from tensorflow.keras.models import Sequential, clone_model
-from tensorflow.keras.layers import Dense, Flatten, Conv1D, Input, MaxPooling2D, GlobalAveragePooling2D
+from tensorflow.keras.layers import Dense, Flatten, Conv1D, Conv2D, Input, MaxPooling2D, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import Adam
 import tensorflow as tf
 tf.keras.utils.disable_interactive_logging()
@@ -17,6 +17,7 @@ class Agent():
         self.epsilon_decay = 0.95/1000
         self.gamma = 0.99
         self.learning_rate = 1e-4
+#        old model does not contain new layer
         self.model = self._build_old_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
