@@ -3,7 +3,6 @@ import sys
 sys.path.append('../src')
 import scoring
 from single_agent.agent import Agent
-from scipy.stats import percentileofscore
 import matplotlib.pyplot as plt
 import random
 import tqdm 
@@ -74,6 +73,43 @@ def get_percentile(state, new_state, action):
 
 
 
+def get_model_action_percentiles(state, n_steps):
+
+    dqn_agent = Agent(10, 10)
+    dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
+    dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
+    dqn_agent.epsilon = 0.0
+
+    model_percentiles = []
+    for i in tqdm.tqdm(range(n_steps)):
+        action = dqn_agent.get_action(state)
+        new_state, score, done = dqn_agent.step(state, action)   
+        action_rating = get_percentile(state, new_state, action)
+
+        model_percentiles.append(action_rating)
+        state = new_state
+        
+    with open('10x10percentiles.pkl', 'wb') as file:
+        pickle.dump(model_percentiles, file)
+
+    print('Array dumped to file successfully.')
+    return model_percentiles
+
+
+
+def plot_percentiles(model_percentiles):
+    plt.hist(model_percentiles, bins = 5, alpha=0.5, label='Dataset 3', edgecolor='white')
+    plt.xlim(0, 100)
+
+    # Add labels and title
+    plt.title("Histograms of Datasets")
+    plt.xlabel("Values")
+    plt.ylabel("Frequency")
+    plt.legend()
+
+    # Show the plot
+    plt.show()
+
 
 state = np.asarray([[ 1 , 1,  1, 23,  5,  5,  1,  5, 23, 23],
  [ 1,  1,  5, 23, 23,  0,  0,  0,  0,  0],
@@ -82,61 +118,8 @@ state = np.asarray([[ 1 , 1,  1, 23,  5,  5,  1,  5, 23, 23],
  [ 1,  1,  1,  1,  5,  1,  5, 23, 23,  0],
  [23,  1,  1, 23,  5,  1, 23,  0,  0,  0],
  [ 1,  5,  5,  7, 23, 23,  0,  0,  0,  0],
- [23,  1,  1,  5,  1,  5, 23,  0,  0,  0],
+ [23,  0,  0,  0,  7,  23, 5,  0,  0,  0],
  [ 1,  7,  5,  1,  7,  0,  0,  0,  0,  0],
  [ 1, 23, 23,  5, 23, 23,  0,  0,  0,  0]])
 
-print(state.shape)
 
-dqn_agent = Agent(10, 10)
-dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
-dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
-dqn_agent.epsilon = 0.0
-
-
-model_percentiles = []
-for i in tqdm.tqdm(range(1)):
-    action = dqn_agent.get_action(state)
-    new_state, score, done = dqn_agent.step(state, action)   
-    action_rating = get_percentile(state, new_state, action)
-
-
-    model_percentiles.append(action_rating)
-    state = new_state
-
-print(model_percentiles)            
-with open('10x10percentiles.pkl', 'wb') as file:
-    pickle.dump(model_percentiles, file)
-
-print('Array dumped to file successfully.')
-
-# Loading the array from the file
-#with open('array_data.pkl', 'rb') as file:
-#    loaded_array = pickle.load(file)
-#
-#print('Array loaded from file:', loaded_array)      
-        
-
-# normal chosen action 
-# new netork chosen action 
-# random chosen action 
-
-# repeat for differnent sizes - get percentages HISTOGRAMS
-#
-#random_per = [15, 59, 35, 23, 66]
-#normal_model_per = [55, 77, 34, 81, 81]
-#new_model_per = [98, 98, 78, 88, 84]
-#
-#plt.hist(random_per, bins=5, alpha=0.5, label='Dataset 1', edgecolor='black')
-#plt.hist(normal_model_per, bins=5, alpha=0.5, label='Dataset 2', edgecolor='black')
-#plt.hist(model_percentiles, bins=20, alpha=0.5, label='Dataset 3', edgecolor='white')
-#plt.xlim(0, 100)
-#
-## Add labels and title
-#plt.title("Histograms of Datasets")
-#plt.xlabel("Values")
-#plt.ylabel("Frequency")
-#plt.legend()
-#
-## Show the plot
-#plt.show()
