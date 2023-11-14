@@ -6,7 +6,7 @@ from single_agent.agent import Agent
 import random
 import tqdm 
 import pickle
-
+import copy
 
 def split_and_shuffle(dictionary):
     sub_dictionaries = {}
@@ -69,8 +69,8 @@ def get_percentile(state, new_state, action):
     return (random.choice(indices)/len(shuffled))*100
 
 
-def get_model_action_percentiles(state, n_steps, random_actions):
-    dqn_agent = Agent(10, 10)
+def get_model_action_percentiles(s, n_steps, random_actions):
+    dqn_agent = Agent(6, 6)
     dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
     dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
     if random_actions:
@@ -79,11 +79,15 @@ def get_model_action_percentiles(state, n_steps, random_actions):
         dqn_agent.epsilon = 0
         
     model_percentiles = []
+    state = copy.deepcopy(s)
     for i in tqdm.tqdm(range(n_steps)):
         action = dqn_agent.get_action(state)
         new_state, score, done = dqn_agent.step(state, action)   
         action_rating = get_percentile(state, new_state, action)
-
+        print(action, action_rating)
+        print(state)
+        print(new_state)
+        print('\n')
         model_percentiles.append(action_rating)
         state = new_state
         
@@ -99,20 +103,18 @@ def get_model_action_percentiles(state, n_steps, random_actions):
     return model_percentiles
     
 
-state = np.asarray([[ 1 , 1,  1, 23,  5,  5,  1,  5, 23, 23],
- [ 1,  1,  5, 23, 23,  0,  0,  0,  0,  0],
- [ 1,  1,  1,  5,  0,  0,  0,  0,  0,  0],
- [ 1,  5,  1,  5, 23,  0,  0,  0,  0,  0],
- [ 1,  1,  1,  1,  5,  1,  5, 23, 23,  0],
- [23,  1,  1, 23,  5,  1, 23,  0,  0,  0],
- [ 1,  5,  5,  7, 23, 23,  0,  0,  0,  0],
- [23,  1,  1,  5,  1,  5, 23,  0,  0,  0],
- [ 1,  7,  5,  1,  7,  0,  0,  0,  0,  0],
- [ 1, 23, 23,  5, 23, 23,  0,  0,  0,  0]])
 
 
+state = np.array([
+    [25, 12, 12, 12, 25, 12],
+    [25, 12, 12, 12, 0, 0],
+    [25, 12, 12, 26, 12, 12],
+    [25, 12, 12, 12, 25, 0],
+    [12, 12, 25, 12, 0, 0],
+    [25, 12, 12, 0, 0, 0]
+])
 
-model_percentiles = get_model_action_percentiles(state, 1000, True)
-plot_percentiles(model_percentiles)
-model_percentiles = get_model_action_percentiles(state, 1000, False)
-plot_percentiles(model_percentiles)
+print(state.shape)
+
+model_percentiles = get_model_action_percentiles(state, 10, False)
+print(model_percentiles)
