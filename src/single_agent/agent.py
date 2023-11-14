@@ -90,7 +90,6 @@ class Agent():
 
     
     def step(self, state, coords):
-#        split state - sliding window heuristic 
         s_list = state.tolist()
         x, y = coords
         row = s_list[y]
@@ -106,7 +105,6 @@ class Agent():
             return state, -10, False
 
         new_state = np.array(s_list).reshape(state.shape)
-#        needs to return done too
         return new_state, self.score(new_state), False
 
 
