@@ -19,14 +19,14 @@ def main(sequences, n, l, training):
         except:
             print("No model weights loaded...")
         
-        for i in tqdm.tqdm(range(1000)):
+        for i in tqdm.tqdm(range(2)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
             ep_return = environment.play_episode(dqn_agent, sequences)
             scores.append(ep_return)
             average_returns.append(ep_return/dqn_agent.memory_threshold)
 
-            if i%100==0:  
+            if i%1==0:  
                 print('\nEpisode: ' + str(i))
                 print('Steps: ' + str(dqn_agent.total_timesteps - timesteps))
                 print('Duration: ' + str(time.time() - timee))
@@ -77,8 +77,8 @@ def main(sequences, n, l, training):
 
 if __name__ == '__main__':
 #    (n,l,a) tuples to represent no. sequences, length and amino acids 
-    n = 10
-    l = 10
+    n = 6
+    l = 6
     a = 4
     scores = []
     for i in range(1):

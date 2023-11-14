@@ -1,4 +1,5 @@
 from single_agent.agent_memory import Memory
+import scoring
 from tensorflow.keras.models import Sequential, clone_model
 from tensorflow.keras.layers import Dense, Flatten, Conv1D, Conv2D, Input, MaxPooling2D, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import Adam
@@ -18,7 +19,7 @@ class Agent():
         self.gamma = 0.99
         self.learning_rate = 1e-4
 #        old model does not contain new layer
-        self.model = self._build_old_model()
+        self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
         self.memory_threshold = 256
@@ -54,10 +55,10 @@ class Agent():
         model = Sequential()
         model.add(Input((self.no_sequences, self.seq_length, 1)))
         model.add(Conv2D(filters=32, kernel_size=(2, 2), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        model.add(Conv2D(filters=64, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv2D(filters=128, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Flatten())
-        model.add(Dense(256, activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        model.add(Dense(128, activation='LeakyReLU'))
+        model.add(Dense(512, activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+#        model.add(Dense(128, activation='LeakyReLU'))
         model.add(Dense(self.no_sequences*self.seq_length, activation='linear'))
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
@@ -81,30 +82,12 @@ class Agent():
         return self.index_to_coords(np.argmax(action_values))
     
     
-    def score(self, old_state, new_state):
-        if (old_state == new_state).all():
-            return -4
+    def score(self, new_state):
+        if not any((new_state == elem).all() for elem in self.memory.states):
+            return scoring.compute_sp_score(new_state)
+        else:     
+            return -2
 
-        n_rows_old, n_cols_old = old_state.shape
-        n_rows_new, n_cols_new = new_state.shape
-
-        score = 0.0
-
-        for i in range(n_rows_old):
-            for j in range(n_cols_old):
-                for k in range(n_rows_new):
-                    for l in range(n_cols_new):
-                        if new_state[k, l] == 0 or old_state[i, j] == 0:
-                            pair_score = -0.5
-                        elif old_state[i, j] == new_state[k, l]:
-                            pair_score = 1
-                        else:
-                            pair_score = 0
-                        score += pair_score
-
-        return score / (n_rows_old * n_cols_old * n_rows_new * n_cols_new)
-
-    
     
     def step(self, state, coords):
 #        split state - sliding window heuristic 
@@ -124,7 +107,7 @@ class Agent():
 
         new_state = np.array(s_list).reshape(state.shape)
 #        needs to return done too
-        return new_state, self.score(state, new_state), False
+        return new_state, self.score(new_state), False
 
 
     def learn(self):
