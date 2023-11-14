@@ -92,11 +92,11 @@ def get_model_action_percentiles(s, n_steps, random_actions):
         state = new_state
         
     if random_actions:
-        with open('10x10percentilesRANDOM.pkl', 'wb') as file:
+        with open('newmodel/6x6percentilesRANDOM.pkl', 'wb') as file:
             pickle.dump(model_percentiles, file)
         print('Array dumped to file successfully.')
     else:
-        with open('10x10percentiles.pkl', 'wb') as file:
+        with open('newmodel/6x6percentiles.pkl', 'wb') as file:
             pickle.dump(model_percentiles, file)
         print('Array dumped to file successfully.')
         
@@ -105,16 +105,13 @@ def get_model_action_percentiles(s, n_steps, random_actions):
 
 
 
-state = np.array([
-    [25, 12, 12, 12, 25, 12],
-    [25, 12, 12, 12, 0, 0],
-    [25, 12, 12, 26, 12, 12],
-    [25, 12, 12, 12, 25, 0],
-    [12, 12, 25, 12, 0, 0],
-    [25, 12, 12, 0, 0, 0]
-])
+state = np.array([[10, 19 ,19, 14  ,6 ,14],
+ [10, 19 ,14 , 6 ,14 , 0],
+ [ 6, 19, 14,  0,  0,  0],
+ [10, 19, 19 , 6 ,14 , 0],
+ [10 ,14 , 0 , 0 , 0 , 0],
+ [10, 10 , 6 ,14 , 0,  0]])
 
 print(state.shape)
 
-model_percentiles = get_model_action_percentiles(state, 10, False)
-print(model_percentiles)
+model_percentiles = get_model_action_percentiles(state, 50, False)
