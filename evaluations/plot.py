@@ -8,7 +8,7 @@ def plot_percentiles(x):
     plt.hist(x, bins=20, density=True, facecolor = '#2ab0ff', edgecolor='#169acf', linewidth=0.5)
     plt.xlim(0,100)
     plt.xlabel('Predicted action percentile') 
-    plt.ylabel('Density of ') 
+    plt.ylabel('Density of datasets') 
     plt.show()
 
     

@@ -19,10 +19,10 @@ class Agent():
         self.gamma = 0.99
         self.learning_rate = 1e-4
 #        old model does not contain new layer
-        self.model = self._build_old_model()
+        self.model = self._build_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
-        self.memory_threshold = 256
+        self.memory_threshold = 128
         self.batch_size = 32
         self.learns = 0
         
@@ -82,11 +82,15 @@ class Agent():
         return self.index_to_coords(np.argmax(action_values))
     
     
-    def score(self, new_state):
-        if not any((new_state == elem).all() for elem in self.memory.states):
+    def score(self, old_state, new_state):
+        if (old_state==new_state).all():
+            return -4
+        else:
             return scoring.compute_sp_score(new_state)
-        else:     
-            return -2
+#        if not any((new_state == elem).all() for elem in self.memory.states):
+#            return scoring.compute_sp_score(new_state)
+#        else:     
+#            return -2
 
     
     def step(self, state, coords):
@@ -105,7 +109,7 @@ class Agent():
             return state, -10, False
 
         new_state = np.array(s_list).reshape(state.shape)
-        return new_state, self.score(new_state), False
+        return new_state, self.score(state, new_state), False
 
 
     def learn(self):
@@ -122,7 +126,7 @@ class Agent():
             self.epsilon -= self.epsilon_decay
         self.learns += 1
         
-        if self.learns % 350 == 0:
+        if self.learns % 250 == 0:
             self.model_target.set_weights(self.model.get_weights())
             print('\nTarget model updated')
                   
