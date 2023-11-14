@@ -3,18 +3,12 @@ import pickle
 import numpy as np
 
 def plot_percentiles(x):
-#    plt.hist(model_percentiles, bins=100, alpha=0.5, density=True, edgecolor='white')
-#    plt.xlim(0, 100)
-#    plt.xlabel("Chosen action ranking percentile")
-#    plt.ylabel("% datasets")
-#    plt.show()
-
-    plt.figure(figsize=(14,7)) # Make it 14x7 inch
-    plt.style.use('seaborn-whitegrid') # nice and clean grid
-    plt.hist(x, bins=100, facecolor = '#2ab0ff', edgecolor='#169acf', linewidth=0.5)
-    plt.xlim(1,100)
-    plt.xlabel('Bins') 
-    plt.ylabel('Values') 
+    plt.figure(figsize=(14,7)) 
+    plt.style.use('seaborn-whitegrid') 
+    plt.hist(x, bins=20, density=True, facecolor = '#2ab0ff', edgecolor='#169acf', linewidth=0.5)
+    plt.xlim(0,100)
+    plt.xlabel('Predicted action percentile') 
+    plt.ylabel('Density of ') 
     plt.show()
 
     
@@ -28,6 +22,6 @@ def percentage_greater_than(lst, x):
 with open('newmodel/6x6percentiles.pkl', 'rb') as file:
     scores = pickle.load(file)
 
-
-
+scores = [i-5 for i in scores]
+print(percentage_greater_than(scores, 20))
 plot_percentiles(scores)
