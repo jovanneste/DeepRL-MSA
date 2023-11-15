@@ -19,11 +19,11 @@ class Agent():
         self.gamma = 0.99
         self.learning_rate = 1e-4
 #        old model does not contain new layer
-        self.model = self._build_model()
+        self.model = self._build_old_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
-        self.memory_threshold = 256
-        self.batch_size = 32
+        self.memory_threshold = 50
+        self.batch_size = 16
         self.learns = 0
         
         
@@ -58,7 +58,7 @@ class Agent():
         model.add(Conv2D(filters=128, kernel_size=(3, 3), activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         model.add(Flatten())
         model.add(Dense(512, activation='LeakyReLU', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-#        model.add(Dense(128, activation='LeakyReLU'))
+        model.add(Dense(128, activation='LeakyReLU'))
         model.add(Dense(self.no_sequences*self.seq_length, activation='linear'))
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
@@ -122,7 +122,7 @@ class Agent():
             self.epsilon -= self.epsilon_decay
         self.learns += 1
         
-        if self.learns % 250 == 0:
+        if self.learns % 150 == 0:
             self.model_target.set_weights(self.model.get_weights())
             print('\nTarget model updated')
                   
