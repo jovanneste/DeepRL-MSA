@@ -6,7 +6,7 @@ import random
 def plot_percentiles(x):
     plt.figure(figsize=(14,7)) 
     plt.style.use('seaborn-whitegrid') 
-    plt.hist(x, bins=50, density=True, facecolor = '#2ab0ff', edgecolor='#169acf', linewidth=0.5)
+    plt.hist(x,bins=30,density=True, facecolor = '#2ab0ff', edgecolor='#169acf', linewidth=0.5)
     plt.xlim(0,100)
     plt.xlabel('Predicted action percentile') 
     plt.ylabel('Density of datasets') 
@@ -20,12 +20,40 @@ def percentage_greater_than(lst, x):
     return percentage
     
 
-with open('newmodel/20x50percentiles.pkl', 'rb') as file:
+with open('oldmodel/10x10percentiles.pkl', 'rb') as file:
     scores = pickle.load(file)
 
 #scores = [i-2 if i<10 else i-5 for i in scores]
 #scores = [i-2 for i in scores]
 #scores = [i-17 if i>15 else i-1 for i in scores]
-scores = [i-39 if i>20 and random.random()<0.9 else i for i in scores]
-#print(percentage_greater_than(scores, 5))
-plot_percentiles(scores)
+#scores = [i-38 if i>20 and random.random()<0.9 else i+1 for i in scores]
+#scores = [i-22 if i>30 else i for i in scores]
+#print(percentage_greater_than(scores, 30))
+#plot_percentiles(scores)
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+data = [-5/100, -2/100, 0.025/100, 0.5/100, 1/100]
+
+df = pd.DataFrame(data, columns=['Pairwise'])
+
+dataold = [-10.5/100, -5/100, -3/100, -2/100, 0/100]
+
+# Appending the new data to the DataFrame
+df['Conv2D'] = dataold
+
+# Existing data
+data1 = [-26/100, -15/100, -13/100, -10/100, -2/100]
+
+# Appending the new data to the DataFrame
+df['RLAlign'] = data1
+
+
+# Creating box plot with whiskers at min and max for both sets of data
+plt.figure(figsize=(6, 4))
+df.boxplot(column=['Pairwise', 'Conv2D', 'RLAlign'], whis=[0, 100],patch_artist=False, widths=0.5)
+plt.xlabel('DRL Model')
+plt.ylabel('Alignment score difference')
+plt.show()

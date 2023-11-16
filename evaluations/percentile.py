@@ -65,12 +65,11 @@ def get_percentile(state, new_state, action):
     values = list(shuffled.values())
 
     indices = [index for index, value in enumerate(list(values)) if value == shuffled[action]]
-
     return (random.choice(indices)/len(shuffled))*100
 
 
 def get_model_action_percentiles(s, n_steps, random_actions):
-    dqn_agent = Agent(20, 50)
+    dqn_agent = Agent(10, 10)
     dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
     dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
     if random_actions:
@@ -88,19 +87,25 @@ def get_model_action_percentiles(s, n_steps, random_actions):
         state = new_state
         
     if random_actions:
-        with open('newmodel/20x50percentilesRANDOM.pkl', 'wb') as file:
+        with open('oldmodel/10x10percentilesRANDOM.pkl', 'wb') as file:
             pickle.dump(model_percentiles, file)
         print('Array dumped to file successfully.')
     else:
-        with open('newmodel/20x50percentiles.pkl', 'wb') as file:
+        with open('oldmodel/10x10percentiles.pkl', 'wb') as file:
             pickle.dump(model_percentiles, file)
         print('Array dumped to file successfully.')
         
     return model_percentiles
+
     
+state = np.asarray([[ 7 , 7 ,20  ,7 ,20 , 7],
+ [ 7, 20,  3, 20,  0,  0],
+ [ 7, 20, 20,  0,  0,  0],
+ [ 7, 20 , 7 ,20 , 0 , 0],
+ [ 7,  7, 20 , 7 , 7 , 0],
+ [ 7, 20,  7 ,20 , 0 , 0]])
 
 
-print(state.shape)
 
-model_percentiles = get_model_action_percentiles(state, 100, False)
-print(model_percentiles)
+#model_percentiles = get_model_action_percentiles(state, 100, False)
+#print(model_percentiles)
