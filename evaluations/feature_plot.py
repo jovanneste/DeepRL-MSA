@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
 dqn_agent = Agent(6, 6)
-#dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
-#dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
+dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
+dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
 
 
 state = np.asarray([[ 7, 20 , 1 ,20 , 1,  1],
@@ -38,7 +38,7 @@ cmap_name = 'custom_cmap'
 custom_cmap = LinearSegmentedColormap.from_list(cmap_name, colors)
 
 # Thresholding the scaled feature map
-scaled_feature_map_thresholded = np.where(scaled_feature_map < 0.5, 0, 1)
+scaled_feature_map_thresholded = np.where(scaled_feature_map < 0.9, 1, 0)
 
 # Plotting the scaled and thresholded feature map with the custom colormap
 plt.imshow(scaled_feature_map_thresholded, cmap=custom_cmap)
