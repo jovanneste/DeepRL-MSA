@@ -1,4 +1,5 @@
 import tensorflow as tf
+from tf_explain.core.grad_cam import GradCAM
 import sys
 sys.path.append('../src')
 from single_agent.agent import Agent
@@ -6,44 +7,49 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
-dqn_agent = Agent(6, 6)
+dqn_agent = Agent(20, 20)
 dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
 dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
+dqn_agent.epsilon = 0
 
 
-state = np.asarray([[ 7, 20 , 1 ,20 , 1,  1],
- [ 1, 20,  1 , 0 , 0 , 0],
- [20 , 1 , 0 , 0 , 0 , 0],
- [ 7, 20,  1, 20 , 1,  1],
- [ 1 ,20 , 1 , 0 , 0 , 0],
- [ 7,  1 , 1 , 0 , 0 , 0]])
+state = np.asarray( [
+    [20, 7, 1, 7, 1, 3, 7, 20, 7, 7, 20, 20, 3, 20, 7, 1, 3, 3, 7, 7],
+    [20, 7, 1, 3, 20, 20, 7, 20, 20, 7, 7, 3, 7, 0, 0, 0, 0, 0, 0, 0],
+    [7, 1, 1, 3, 7, 20, 7, 7, 3, 3, 20, 7, 3, 3, 20, 0, 0, 0, 0, 0],
+    [1, 7, 20, 3, 7, 20, 20, 3, 20, 1, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [20, 1, 20, 7, 20, 3, 20, 7, 1, 3, 3, 7, 0, 0, 0, 0, 0, 0, 0, 0],
+    [20, 7, 3, 7, 20, 3, 7, 7, 7, 20, 20, 7, 1, 3, 7, 20, 0, 0, 0, 0],
+    [20, 7, 1, 7, 1, 3, 7, 7, 20, 7, 20, 7, 1, 3, 3, 0, 0, 0, 0, 0],
+    [7, 7, 20, 7, 20, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [20, 20, 1, 7, 3, 3, 7, 7, 20, 20, 3, 7, 3, 7, 0, 0, 0, 0, 0, 0],
+    [7, 1, 7, 20, 1, 7, 20, 7, 7, 20, 20, 3, 20, 1, 1, 7, 7, 0, 0, 0],
+    [20, 7, 7, 1, 3, 7, 20, 7, 20, 7, 20, 1, 20, 7, 7, 0, 0, 0, 0, 0],
+    [20, 1, 1, 1, 3, 1, 7, 7, 20, 20, 3, 20, 7, 1, 3, 7, 0, 0, 0, 0],
+    [7, 1, 7, 1, 3, 7, 20, 7, 7, 20, 3, 20, 1, 1, 3, 7, 0, 0, 0, 0],
+    [20, 7, 1, 1, 7, 7, 1, 1, 3, 7, 3, 3, 7, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 7, 1, 3, 20, 7, 7, 20, 20, 3, 1, 3, 3, 7, 0, 0, 0, 0, 0],
+    [7, 7, 1, 20, 7, 7, 3, 20, 1, 1, 3, 7, 7, 0, 0, 0, 0, 0, 0, 0],
+    [20, 7, 1, 7, 7, 7, 7, 20, 3, 20, 7, 3, 3, 7, 7, 0, 0, 0, 0, 0],
+    [1, 3, 7, 20, 1, 7, 20, 20, 20, 1, 3, 3, 7, 1, 0, 0, 0, 0, 0, 0],
+    [20, 3, 1, 7, 3, 1, 7, 7, 20, 20, 3, 20, 7, 3, 7, 0, 0, 0, 0, 0],
+    [20, 1, 7, 3, 7, 20, 7, 20, 20, 3, 20, 7, 1, 3, 20, 3, 3, 0, 0, 0]
+])
 
 
-# Forward alignment data through the model to obtain feature maps
-feature_map = dqn_agent.model.predict(state.reshape((1,6,6,1))).reshape(6,6)
-predicted_action = np.argmax(feature_map)
-
-print(predicted_action)
-feature_map.reshape(6,6)
 
 
 
-min_val = np.min(feature_map)
-max_val = np.max(feature_map)
-scaled_feature_map = (feature_map - min_val) / (max_val - min_val)
+input_data = state.reshape((1,20,20,1))
+action = dqn_agent.get_action(input_data)
+print(action)
+explainer = GradCAM()
 
-# Create a custom colormap
-colors = [(0, 0, 0), (1, 1, 1)]  # Black to White
-cmap_name = 'custom_cmap'
-custom_cmap = LinearSegmentedColormap.from_list(cmap_name, colors)
 
-# Thresholding the scaled feature map
-scaled_feature_map_thresholded = np.where(scaled_feature_map < 0.9, 1, 0)
-
-# Plotting the scaled and thresholded feature map with the custom colormap
-plt.imshow(scaled_feature_map_thresholded, cmap=custom_cmap)
-plt.colorbar()  # Add a color bar to indicate values
-plt.title('Scaled and Thresholded Feature Map Heatmap')
-plt.xlabel('Width')
-plt.ylabel('Height')
-plt.show()
+for i in [0,5,10,50,80,200]:
+    print(i)
+    grid = explainer.explain((input_data, None), dqn_agent.model, class_index=i)  
+    print(grid.shape)
+    plt.imshow(grid)
+    plt.title('GradCAM Heatmap')
+    plt.show()
