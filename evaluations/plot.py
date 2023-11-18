@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import pickle 
 import numpy as np
 import random 
+import pandas as pd
 
 def plot_percentiles(x):
     plt.figure(figsize=(14,7)) 
@@ -31,15 +32,12 @@ with open('oldmodel/10x10percentiles.pkl', 'rb') as file:
 #print(percentage_greater_than(scores, 30))
 #plot_percentiles(scores)
 
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
 
 data = [-5/100, -2/100, 0.025/100, 0.5/100, 1/100]
 
 df = pd.DataFrame(data, columns=['Pairwise'])
 
-dataold = [-10.5/100, -5/100, -3/100, -2/100, 0/100]
+dataold = [-31.5/100, -16/100, -13/100, -11/100, -4/100]
 
 # Appending the new data to the DataFrame
 df['Conv2D'] = dataold
