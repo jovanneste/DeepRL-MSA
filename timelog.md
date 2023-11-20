@@ -145,9 +145,57 @@
 ### 05 Nov 2023
 * *3 hours* Work on literature review 
 
+## Week 7
+
 ### 06 Nov 2023
 * *2 hours* Reseach into real data sets to use 
 
 ### 07 Nov 2023
 * *2 hours* New network created with new layer 
 * *1 hour* Think about whether to use FC layers
+
+### 07 Nov 2023
+
+### 08 Nov 2023
+* *4 hours* Work on interm report 
+
+### 09 Nov 2023
+* *2 hours* Work on literature review 
+* *2 hours* Meeting
+* *1 hour* Meeting write-up
+
+### 10 Nov 2023
+* *2 hours* Work on interm report 
+
+### 11 Nov 2023
+
+### 12 Nov 2023
+
+## Week 8
+
+### 13 Nov 2023
+* *2 hours* Reseach into RL for MSA for report 
+
+### 14 Nov 2023
+* *6 hours* Work on interm report 
+
+### 15 Nov 2023
+* *2 hours* Collect histograms 
+* *2 hours* Running old model
+
+### 16 Nov 2023
+* *4 hours* Work on interm report 
+
+### 17 Nov 2023
+* *2 hours* Work on literature review 
+* *2 hours* Meeting
+* *1 hour* Meeting write-up
+
+### 18 Nov 2023
+
+### 19 Nov 2023
+
+## Week 9
+
+### 20 Nov 2023
+* *6 hours* Work on interm report 
