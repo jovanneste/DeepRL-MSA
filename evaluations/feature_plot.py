@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
 dqn_agent = Agent(10, 15)
-dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
-dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
-dqn_agent.epsilon = 0
+#dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
+#dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
+dqn_agent.epsilon = 1
 
 
 state = np.asarray([
@@ -34,31 +34,33 @@ print("Chosen action: ", action)
 
 explainer = GradCAM()
 
-for i in [10, 50,100, action, 120]:
+for i in range(0,150,3):
     print(i)
     grid = explainer.explain((input_data, None), dqn_agent.model, class_index=i)  
-    plt.imshow(grid)
-    plt.show()
-
-    # Plot the state and GradCAM heatmap overlay
-    fig, ax = plt.subplots(figsize=(8, 8))
-
-    # Plot the state array
-    ax.imshow(state, cmap='viridis')  # Adjust the colormap as needed
-
-    # Overlay the GradCAM heatmap with numbers
-    masked_array = np.ma.masked_where(grid < grid.max(), grid)
-    im = ax.imshow(masked_array, alpha=0.5, cmap='coolwarm')  # Adjust the colormap and transparency as needed
-
-    # Display numbers from the state array on the plot
-    for i in range(state.shape[0]):
-        for j in range(state.shape[1]):
-            ax.text(j, i, state[i, j], ha='center', va='center', color='black')
-
-    # Add a color bar
-    cbar = plt.colorbar(im, ax=ax)
+    plt.imshow(grid, cmap='viridis')
+    cbar = plt.colorbar()
     cbar.set_label('Attention Level')
 
-    plt.title('State with GradCAM Heatmap Overlay')
     plt.show()
-    
+#    # Plot the state and GradCAM heatmap overlay
+#    fig, ax = plt.subplots(figsize=(8, 8))
+#
+#    # Plot the state array
+#    ax.imshow(state, cmap='viridis')  # Adjust the colormap as needed
+#
+#    # Overlay the GradCAM heatmap with numbers
+#    masked_array = np.ma.masked_where(grid < grid.max(), grid)
+#    im = ax.imshow(masked_array, alpha=0.5, cmap='coolwarm')  # Adjust the colormap and transparency as needed
+#
+#    # Display numbers from the state array on the plot
+#    for i in range(state.shape[0]):
+#        for j in range(state.shape[1]):
+#            ax.text(j, i, state[i, j], ha='center', va='center', color='black')
+#
+#    # Add a color bar
+#    cbar = plt.colorbar(im, ax=ax)
+#    cbar.set_label('Attention Level')
+#
+#    plt.title('State with GradCAM Heatmap Overlay')
+#    plt.show()
+#    
