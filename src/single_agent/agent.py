@@ -19,11 +19,11 @@ class Agent():
         self.gamma = 0.99
         self.learning_rate = 1e-4
 #        old model does not contain new layer
-        self.model = self._build_model()
+        self.model = self._build_old_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
-        self.memory_threshold = 64
-        self.batch_size = 16
+        self.memory_threshold = 128
+        self.batch_size = 32
         self.learns = 0
         
         
