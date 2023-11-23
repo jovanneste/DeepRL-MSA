@@ -33,13 +33,13 @@ class Agent():
         
         model.add(PairwiseConv1D(filters=8, kernel_size=5))
         
-        model.add(Conv1D(filters=32, kernel_size=3, activation='relu', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv1D(filters=32, kernel_size=3, activation='LeakyReLU', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         
-        model.add(Conv1D(filters=64, kernel_size=2, activation='relu', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv1D(filters=64, kernel_size=2, activation='LeakyReLU', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         
         model.add(MaxPooling2D(pool_size=(2, 2)))
         
-        model.add(Conv1D(filters=self.no_sequences*self.seq_length, kernel_size=1, activation='relu', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
+        model.add(Conv1D(filters=self.no_sequences*self.seq_length, kernel_size=1, activation='LeakyReLU', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
         
         model.add(GlobalAveragePooling2D())
             

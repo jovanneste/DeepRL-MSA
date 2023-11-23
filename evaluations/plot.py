@@ -33,14 +33,14 @@ with open('oldmodel/10x10percentiles.pkl', 'rb') as file:
 #plot_percentiles(scores)
 
 
-data = [-5/100, -2/100, 0.025/100, 0.5/100, 1/100]
+data = [-4/100, -3/100, -1/100, 0/100, 1/100]
 
 df = pd.DataFrame(data, columns=['Pairwise'])
 
-dataold = [-31.5/100, -16/100, -13/100, -11/100, -4/100]
+dataold = [-30/100, -14/100, -10/100, -9/100, -3/100]
 
 # Appending the new data to the DataFrame
-df['Conv2D'] = dataold
+df['Conv2d'] = dataold
 
 # Existing data
 data1 = [-26/100, -15/100, -13/100, -10/100, -2/100]
@@ -51,7 +51,7 @@ df['RLAlign'] = data1
 
 # Creating box plot with whiskers at min and max for both sets of data
 plt.figure(figsize=(6, 4))
-df.boxplot(column=['Pairwise', 'Conv2D', 'RLAlign'], whis=[0, 100],patch_artist=False, widths=0.5)
-plt.xlabel('DRL Model')
+df.boxplot(column=['Pairwise', 'Conv2d'], whis=[0, 100],patch_artist=False, widths=0.5)
+plt.xlabel('Model')
 plt.ylabel('Alignment score difference')
 plt.show()

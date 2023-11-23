@@ -8,23 +8,21 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 
 dqn_agent = Agent(10, 15)
-#dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
-#dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
-dqn_agent.epsilon = 1
+dqn_agent.model.load_weights('../src/single_agent/recent_weights.hdf5')
+dqn_agent.model_target.load_weights('../src/single_agent/recent_weights.hdf5')
+dqn_agent.epsilon = 0
 
 
-state = np.asarray([
-    [20, 7, 3, 20, 1, 1, 3, 1, 1, 1, 20, 20, 3, 7, 20],
-    [7, 3, 20, 1, 3, 1, 20, 20, 3, 7, 20, 0, 0, 0, 0],
-    [3, 20, 1, 3, 1, 1, 7, 20, 7, 20, 0, 0, 0, 0, 0],
-    [20, 3, 3, 20, 1, 1, 1, 1, 1, 20, 3, 0, 0, 0, 0],
-    [20, 7, 20, 1, 1, 1, 20, 20, 7, 7, 1, 0, 0, 0, 0],
-    [20, 7, 3, 20, 20, 1, 3, 1, 7, 20, 20, 3, 7, 7, 0],
-    [20, 7, 3, 20, 1, 7, 1, 1, 3, 20, 20, 1, 20, 0, 0],
-    [20, 7, 3, 20, 20, 1, 3, 1, 1, 1, 7, 20, 1, 7, 20],
-    [3, 20, 1, 1, 1, 1, 1, 20, 7, 1, 20, 20, 0, 0, 0],
-    [7, 7, 3, 20, 1, 1, 1, 1, 3, 20, 20, 3, 7, 20, 0]
-])
+state = np.asarray([[20, 7, 7, 1, 20, 3, 1, 3, 20, 20, 3, 1, 1, 1, 3],
+ [7, 3, 1, 7, 20, 3, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+ [20, 7, 1, 1, 20, 3, 1, 20, 20, 3, 20, 1, 1, 3, 0],
+ [20, 7, 1, 20, 3, 3, 20, 3, 3, 3, 1, 7, 3, 0, 0],
+ [20, 7, 7, 1, 20, 3, 3, 20, 20, 3, 1, 1, 1, 3, 0],
+ [20, 7, 7, 1, 20, 3, 3, 20, 3, 1, 3, 0, 0, 0, 0],
+ [20, 7, 7, 20, 3, 1, 3, 20, 1, 3, 20, 1, 1, 3, 0],
+ [20, 7, 7, 20, 3, 1, 3, 3, 1, 1, 3, 0, 0, 0, 0],
+ [7, 7, 20, 20, 3, 1, 3, 20, 20, 1, 1, 1, 3, 0, 0],
+ [20, 7, 7, 1, 20, 3, 3, 7, 20, 3, 1, 3, 3, 0, 0]])
 
 print(state.shape)
 
@@ -34,7 +32,7 @@ print("Chosen action: ", action)
 
 explainer = GradCAM()
 
-for i in range(0,150,3):
+for i in [1,2,action]:
     print(i)
     grid = explainer.explain((input_data, None), dqn_agent.model, class_index=i)  
     plt.imshow(grid, cmap='viridis')
