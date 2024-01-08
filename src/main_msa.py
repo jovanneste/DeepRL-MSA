@@ -78,8 +78,8 @@ def main(sequences, n, l, training):
 if __name__ == '__main__':
 #    (n,l,a) tuples to represent no. sequences, length and amino acids 
     n = 10
-    l = 15
-    a = 4
+    l = 500
+    a = 10
     scores = []
     for i in range(1):
         sequences = seq_generator.generate(n,l,a,0.2,0.2)
