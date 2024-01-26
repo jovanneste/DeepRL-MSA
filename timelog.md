@@ -195,7 +195,37 @@
 
 ### 19 Nov 2023
 
-## Week 9
+## Week 11
 
-### 20 Nov 2023
-* *6 hours* Work on interm report 
+### 15 Jan 2024
+* *2 hours* Complexity analysis of my method 
+
+### 16 Jan 2024
+* *2 hours* Complexity analysis of several MSA methods to compare 
+
+### 17 Jan 2024
+
+### 18 Jan 2024
+
+### 19 Jan 2024
+* *3 hours* Planning MARL solution 
+
+### 20 Jan 2024
+* *4 hours* Implementing start of MARL - black and white agents created 
+
+### 21 Jan 2024
+
+## Week 12
+
+### 22 Jan 2024
+* *2 hours* Implementing of MARL solution
+
+### 23 Jan 2024
+* *1 hour* Complexity analysis resutls plotted
+
+### 24 Jan 2024
+
+### 25 Jan 2024
+
+### 26 Jan 2024
+* *2 hour* Meeting and write up
