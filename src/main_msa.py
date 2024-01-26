@@ -1,4 +1,4 @@
-from agents.agent import Agent
+from agents.single_agent import Agent
 import seq_generator
 import environment
 import numpy as np
@@ -11,6 +11,31 @@ import tqdm
 def main(sequences, n, l, training):
     dqn_agent = Agent(n, l)
     scores, average_returns = [], []
+    
+    
+    marl = False
+    #for MARL solution 
+    #-----------------------------------------------------------------
+    
+    if marl:
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+     #-----------------------------------------------------------------
+    
+    
+    
+    
+    
+    
+    
     if training:
         try:
             dqn_agent.model.load_weights('agents/recent_weights.hdf5')
