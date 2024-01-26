@@ -46,8 +46,9 @@ def take_step_marl(white_agent, black_agent):
     if done:
         return (score+reward), True
 
-    if len(agent.memory) > agent.memory_threshold:
-        agent.learn()
+    if len(white_agent.memory) > white_agent.memory_threshold:
+        white_agent.learn()
+        black_agent.learn()
         return (score+reward), True
 
     return (score+reward), False
