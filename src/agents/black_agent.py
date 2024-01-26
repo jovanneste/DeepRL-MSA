@@ -8,7 +8,7 @@ tf.keras.utils.disable_interactive_logging()
 import numpy as np
 from pairwise_layer import PairwiseConv1D
 
-class Agent():
+class BlackAgent():
     def __init__(self, no_seq, length):
         self.memory = Memory(1000)
         self.no_sequences = no_seq
@@ -19,7 +19,7 @@ class Agent():
         self.gamma = 0.99
         self.learning_rate = 1e-4
 #        old model does not contain new layer
-        self.model = self._build_model()
+        self.model = self._build_old_model()
         self.model_target = clone_model(self.model)
         self.total_timesteps = 0
         self.memory_threshold = 128
@@ -47,7 +47,7 @@ class Agent():
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
         model.summary()
-        print('\nAgent Initialised\n')
+        print('\nBlack agent Initialised\n')
         return model
     
     
@@ -63,7 +63,7 @@ class Agent():
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
 #        model.summary()
-        print('\nAgent Initialised\n')
+        print('\nBlack agent Initialised\n')
         return model
     
     

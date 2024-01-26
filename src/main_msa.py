@@ -1,4 +1,6 @@
 from agents.single_agent import Agent
+from agents.white_agent import WhiteAgent
+from agents.black_agent import BlackAgent
 import seq_generator
 import environment
 import numpy as np
@@ -13,14 +15,14 @@ def main(sequences, n, l, training):
     scores, average_returns = [], []
     
     
-    marl = False
+    marl = True
     #for MARL solution 
     #-----------------------------------------------------------------
     if marl:
         print("LOADING MARL SOLUTION.....")
-        white_agent = 
-        black_agent = 
-        for in tqdm.tqdm(range(10)):
+        white_agent = WhiteAgent(n,l)
+        black_agent = BlackAgent(n,l)
+        for i in tqdm.tqdm(range(10)):
             timesteps = white_agent.total_timesteps
             timee = time.time()
             ep_return = environment.play_marl_episode(white_agent, black_agent, sequences)
