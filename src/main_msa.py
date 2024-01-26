@@ -34,21 +34,13 @@ def main(sequences, n, l, training):
                 print('Score: ' + str(ep_return))
                 print('Average return of action: ' + str(ep_return/white_agent.memory_threshold))
                 print('Epsilon: ' + str(white_agent.epsilon))
-            
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-     #-----------------------------------------------------------------
-    
-    
-    
+                
+        plt.plot(scores)
+        plt.xlabel('Episode')
+        plt.ylabel('Average reward')
+        plt.show()
+        return scores
+    #-----------------------------------------------------------------
     
     
     

@@ -1,10 +1,10 @@
 import numpy as np
 
-def initialise_new_game(agent, state):
-    agent.memory.clear()
-    agent.memory.store_experience(state, (0,0), 0)
-    
-
+def initialise_new_game(agents, state):
+    for agent in agents:
+        agent.memory.clear()
+        agent.memory.store_experience(state, (0,0), 0)
+        
 def take_step(agent):
     agent.total_timesteps += 1
     if agent.total_timesteps % 100 == 0:
@@ -27,10 +27,22 @@ def take_step(agent):
 def play_single_episode(agent, sequences):
     global score
     score = 0
-    initialise_new_game(agent, sequences)
+    initialise_new_game([agent], sequences)
     done = False
     while True:
         score, done = take_step(agent)
         if done:
             break
     return score
+
+def play_marl_episode(white_agent, black_agent, sequences):
+    global score
+    score = 0
+    initialise_new_game([white_agent, black_agent], sequences)
+    done = False
+    while True:
+        score, done = take_step(agent)
+        if done:
+            break
+    return score
+    
