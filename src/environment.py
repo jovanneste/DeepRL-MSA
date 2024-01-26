@@ -24,7 +24,7 @@ def take_step(agent):
     return (score+reward), False
     
     
-def play_episode(agent, sequences):
+def play_single_episode(agent, sequences):
     global score
     score = 0
     initialise_new_game(agent, sequences)

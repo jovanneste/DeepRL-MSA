@@ -16,8 +16,24 @@ def main(sequences, n, l, training):
     marl = False
     #for MARL solution 
     #-----------------------------------------------------------------
-    
     if marl:
+        white_agent = 
+        black_agent = 
+        for in tqdm.tqdm(range(10)):
+            timesteps = white_agent.total_timesteps
+            timee = time.time()
+            ep_return = environment.play_marl_episode(dqn_agent, sequences)
+            scores.append(ep_return)
+            average_returns.append(ep_return/dqn_agent.memory_threshold)
+
+            if i%1==0:  
+                print('\nEpisode: ' + str(i))
+                print('Steps: ' + str(dqn_agent.total_timesteps - timesteps))
+                print('Duration: ' + str(time.time() - timee))
+                print('Score: ' + str(ep_return))
+                print('Average return of action: ' + str(ep_return/dqn_agent.memory_threshold))
+                print('Epsilon: ' + str(dqn_agent.epsilon))
+            
         
     
     
@@ -47,7 +63,7 @@ def main(sequences, n, l, training):
         for i in tqdm.tqdm(range(10)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
-            ep_return = environment.play_episode(dqn_agent, sequences)
+            ep_return = environment.play_single_episode(dqn_agent, sequences)
             scores.append(ep_return)
             average_returns.append(ep_return/dqn_agent.memory_threshold)
 
