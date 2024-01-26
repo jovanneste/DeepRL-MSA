@@ -17,22 +17,23 @@ def main(sequences, n, l, training):
     #for MARL solution 
     #-----------------------------------------------------------------
     if marl:
+        print("LOADING MARL SOLUTION.....")
         white_agent = 
         black_agent = 
         for in tqdm.tqdm(range(10)):
             timesteps = white_agent.total_timesteps
             timee = time.time()
-            ep_return = environment.play_marl_episode(dqn_agent, sequences)
+            ep_return = environment.play_marl_episode(white_agent, black_agent, sequences)
             scores.append(ep_return)
-            average_returns.append(ep_return/dqn_agent.memory_threshold)
+            average_returns.append(ep_return/white_agent.memory_threshold)
 
             if i%1==0:  
                 print('\nEpisode: ' + str(i))
-                print('Steps: ' + str(dqn_agent.total_timesteps - timesteps))
+                print('Steps: ' + str(white_agent.total_timesteps - timesteps))
                 print('Duration: ' + str(time.time() - timee))
                 print('Score: ' + str(ep_return))
-                print('Average return of action: ' + str(ep_return/dqn_agent.memory_threshold))
-                print('Epsilon: ' + str(dqn_agent.epsilon))
+                print('Average return of action: ' + str(ep_return/white_agent.memory_threshold))
+                print('Epsilon: ' + str(white_agent.epsilon))
             
         
     
@@ -51,7 +52,7 @@ def main(sequences, n, l, training):
     
     
     
-    
+    print("LOADING SARL SOLUTION.....")
     if training:
         try:
             dqn_agent.model.load_weights('agents/recent_weights.hdf5')
