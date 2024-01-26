@@ -1,4 +1,4 @@
-from single_agent.agent import Agent
+from agents.agent import Agent
 import seq_generator
 import environment
 import numpy as np
@@ -13,8 +13,8 @@ def main(sequences, n, l, training):
     scores, average_returns = [], []
     if training:
         try:
-            dqn_agent.model.load_weights('single_agent/recent_weights.hdf5')
-            dqn_agent.model_target.load_weights('single_agent/recent_weights.hdf5')
+            dqn_agent.model.load_weights('agents/recent_weights.hdf5')
+            dqn_agent.model_target.load_weights('agents/recent_weights.hdf5')
             print("Previous weights loaded...")
         except:
             print("No model weights loaded...")
@@ -54,8 +54,8 @@ def main(sequences, n, l, training):
     else: 
         print("Loading previous model weights...")
         try:
-            dqn_agent.model.load_weights('single_agent/recent_weights.hdf5')
-            dqn_agent.model_target.load_weights('single_agent/recent_weights.hdf5')
+            dqn_agent.model.load_weights('agents/recent_weights.hdf5')
+            dqn_agent.model_target.load_weights('agents/recent_weights.hdf5')
             dqn_agent.epsilon = 0.0
         except:
             print("No model weights found... exiting")

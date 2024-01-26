@@ -8,7 +8,7 @@ def initialise_new_game(agent, state):
 def take_step(agent):
     agent.total_timesteps += 1
     if agent.total_timesteps % 100 == 0:
-        agent.model.save_weights('single_agent/recent_weights.hdf5')
+        agent.model.save_weights('agents/recent_weights.hdf5')
 
     next_state, reward, done = agent.step(agent.memory.states[-1], agent.memory.actions[-1])
     next_action = agent.get_action(next_state)
