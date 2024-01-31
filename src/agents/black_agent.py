@@ -79,6 +79,7 @@ class BlackAgent():
             return (np.random.randint(0, self.seq_length), np.random.randint(0, self.no_sequences))
         
         action_values = self.model.predict(state.reshape(1,self.no_sequences,self.seq_length,1))
+        print("Black move: ", self.index_to_coords(np.argmax(action_values)))
         return self.index_to_coords(np.argmax(action_values))
     
     
