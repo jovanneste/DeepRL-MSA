@@ -55,7 +55,7 @@ def main(sequences, n, l, training):
         except:
             print("No model weights loaded...")
         
-        for i in tqdm.tqdm(range(100)):
+        for i in tqdm.tqdm(range(1000)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
             ep_return = environment.play_single_episode(dqn_agent, sequences)
@@ -100,12 +100,12 @@ def main(sequences, n, l, training):
         state = sequences
         print("Starting alignment - ")
         print(state)
-        for i in range(100):
+        for i in range(2000):
             action = dqn_agent.get_action(state)
             new_state, score, done = dqn_agent.step(state, action)       
 
             state = new_state
-            if i %10==0:
+            if i%500==0:
                 print(state)
             
         return 0
@@ -119,7 +119,7 @@ a = 4
 sequences = seq_generator.generate(n,l,a,0.2,0.2)
 print("Launching SARL solution...")
 
-execution_time = timeit.timeit(lambda: main(sequences, n, l, True), number=1)
+execution_time = timeit.timeit(lambda: main(sequences, n, l, False), number=1)
 
 
 print("Execution time:", execution_time, "seconds")
