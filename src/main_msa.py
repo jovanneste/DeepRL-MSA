@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import time
 import os 
 import tqdm
+import timeit
 
 
 def main(sequences, n, l, training):
@@ -54,7 +55,7 @@ def main(sequences, n, l, training):
         except:
             print("No model weights loaded...")
         
-        for i in tqdm.tqdm(range(1000)):
+        for i in tqdm.tqdm(range(100)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
             ep_return = environment.play_single_episode(dqn_agent, sequences)
@@ -110,15 +111,16 @@ def main(sequences, n, l, training):
         return 0
         
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
 #    (n,l,a) tuples to represent no. sequences, length and amino acids 
-    n = 5
-    l = 5
-    a = 4
-    scores = []
-    for i in range(1):
-        sequences = seq_generator.generate(n,l,a,0.2,0.2)
-        print("Training on sequence " +str(i))
-        print(sequences)
-        scores.append(main(sequences, n, l, True))
-    print(scores)
+n = 5
+l = 5
+a = 4
+sequences = seq_generator.generate(n,l,a,0.2,0.2)
+print("Launching SARL solution...")
+
+execution_time = timeit.timeit(lambda: main(sequences, n, l, True), number=1)
+
+
+print("Execution time:", execution_time, "seconds")
+
