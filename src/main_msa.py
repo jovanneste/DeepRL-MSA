@@ -14,8 +14,7 @@ def main(sequences, n, l, training):
     dqn_agent = Agent(n, l)
     scores, average_returns = [], []
     
-    
-    marl = True
+    marl = False
     #for MARL solution 
     #-----------------------------------------------------------------
     if marl:
@@ -55,14 +54,14 @@ def main(sequences, n, l, training):
         except:
             print("No model weights loaded...")
         
-        for i in tqdm.tqdm(range(10)):
+        for i in tqdm.tqdm(range(1000)):
             timesteps = dqn_agent.total_timesteps
             timee = time.time()
             ep_return = environment.play_single_episode(dqn_agent, sequences)
             scores.append(ep_return)
             average_returns.append(ep_return/dqn_agent.memory_threshold)
 
-            if i%1==0:  
+            if i%100==0:  
                 print('\nEpisode: ' + str(i))
                 print('Steps: ' + str(dqn_agent.total_timesteps - timesteps))
                 print('Duration: ' + str(time.time() - timee))
