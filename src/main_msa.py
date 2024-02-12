@@ -9,13 +9,13 @@ import time
 import os 
 import tqdm
 import timeit
+import argparse
 
 
-def main(sequences, n, l, training):
+def main(sequences, n, l, training, marl):
     dqn_agent = Agent(n, l)
     scores, average_returns = [], []
     
-    marl = False
     #for MARL solution 
     #-----------------------------------------------------------------
     if marl:
@@ -29,7 +29,7 @@ def main(sequences, n, l, training):
             scores.append(ep_return)
             average_returns.append(ep_return/white_agent.memory_threshold)
 
-            if i%1==0:  
+            if i%100==0:  
                 print('\nEpisode: ' + str(i))
                 print('Steps: ' + str(white_agent.total_timesteps - timesteps))
                 print('Duration: ' + str(time.time() - timee))
@@ -111,16 +111,18 @@ def main(sequences, n, l, training):
         return 0
         
 
-#if __name__ == '__main__':
-#    (n,l,a) tuples to represent no. sequences, length and amino acids 
-n = 5
-l = 5
-a = 4
-sequences = seq_generator.generate(n,l,a,0.2,0.2)
-print("Launching SARL solution...")
 
-execution_time = timeit.timeit(lambda: main(sequences, n, l, False), number=1)
+if __name__=='__main__':
+    parser = argparse.ArgumentParser(description='Run SARL or MARL solution with the --multi flag.')
+    parser.add_argument('--multi', dest='multi', action='store_true', help='Run multi-agent (MARL) solution.')
+    parser.add_argument('--train', dest='train', action='store_true', help='Train RL model.')
+    args = parser.parse_args()
 
+    n = 5
+    l = 5
+    a = 4
 
-print("Execution time:", execution_time, "seconds")
+    sequences = seq_generator.generate(n,l,a,0.2,0.2)
+    execution_time = timeit.timeit(lambda: main(sequences, n, l, args.train, args.multi), number=1)
+    print("Execution time:", execution_time, "seconds")
 
