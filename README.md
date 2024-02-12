@@ -1,12 +1,12 @@
 # Creating Multiple Sequences Alignments with deep reinforcement learning 
 
 ## Overview
-This project implements a single-agent and multi-agent solution for Multi-Agent Systems (MSA). The MSA is designed to [briefly describe the purpose or goal of your project].
+Multiple Sequence Alignment (MSA) refers to the process of aligning biological sequences (DNA, RNA or proteins) for comparison. This is generally done for evolutionary analysis and, more recently, drug design and discovery. Advanced protein predictor networks such as AlphaFold use MSA to predict the 3D structure of proteins. However, as an NP complete problem, MSA is a difficult. This project proposes an innovative method to create MSAs leveraging deep reinforcement learning using a novel operator layer for pairwise feature extraction. 
 
 ## Features
-- Single-agent solution: [Brief description of the single-agent solution]
-- Multi-agent solution: [Brief description of the multi-agent solution]
-- [Add more features as necessary]
+- Single-agent solution: Create an MSA using a single RL agent. 
+- Multi-agent solution: Create an MSA using two RL agents. 
+
 
 ## Installation
 1. Clone the repository:
