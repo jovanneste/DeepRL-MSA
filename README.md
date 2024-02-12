@@ -22,19 +22,22 @@ Multiple Sequence Alignment (MSA) refers to the process of aligning biological s
 
 ## Usage
 
-Naviagte to the 'src' directory and run either solution.
+Naviagte to the *src* directory and run either solution.
 
 ### Single-agent 
 Run the single-agent solution:
-    ```sh
-    python main_msa.py
-    ```
+
+
+```sh
+python main_msa.py 
+```
 
 ### Multi-agent 
-2. Run the multi-agent solution:
-    ```sh
-    python main_msa.py --multi
-    ```
+Run the multi-agent solution:
+
+```sh
+python main_msa.py --multi
+```
 
 ## Examples
 - [Provide examples or screenshots of the output/results]
