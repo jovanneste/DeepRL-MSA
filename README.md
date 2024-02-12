@@ -11,8 +11,8 @@ Multiple Sequence Alignment (MSA) refers to the process of aligning biological s
 ## Installation
 1. Clone the repository:
     ```sh
-    git clone https://github.com/your_username/msa-project.git
-    cd msa-project
+    git clone https://github.com/jovanneste/DeepRL-MSA.git
+    cd DeepRL-MSA
     ```
 
 2. Install dependencies:
@@ -21,26 +21,19 @@ Multiple Sequence Alignment (MSA) refers to the process of aligning biological s
     ```
 
 ## Usage
-### Single-agent Solution
-1. Navigate to the `single_agent` directory:
+
+Naviagte to the 'src' directory and run either solution.
+
+### Single-agent 
+Run the single-agent solution:
     ```sh
-    cd single_agent
+    python main_msa.py
     ```
 
-2. Run the single-agent solution:
-    ```sh
-    python main.py
-    ```
-
-### Multi-agent Solution
-1. Navigate to the `multi_agent` directory:
-    ```sh
-    cd multi_agent
-    ```
-
+### Multi-agent 
 2. Run the multi-agent solution:
     ```sh
-    python main.py
+    python main_msa.py --multi
     ```
 
 ## Examples
