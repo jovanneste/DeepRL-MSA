@@ -5,8 +5,8 @@ Multiple Sequence Alignment (MSA) refers to the process of aligning biological s
 
 ## Features
 - Single-agent solution: Create an MSA using a single RL agent. 
-- Multi-agent solution: Create an MSA using two RL agents. 
-
+- Multi-agent solution: Create an MSA using two co-operative RL agents. 
+- Ensemble model: Up to five agents with majority voting.
 
 ## Installation
 1. Clone the repository:
@@ -22,7 +22,7 @@ Multiple Sequence Alignment (MSA) refers to the process of aligning biological s
 
 ## Usage
 
-Naviagte to the *src* directory and run either solution.
+Naviagte to the *src* directory and run a solution.
 
 ### Single-agent 
 Run the single-agent solution:
@@ -38,6 +38,14 @@ Run the multi-agent solution:
 ```sh
 python main_msa.py --multi
 ```
+
+### Ensemble 
+Run the multi-agent solution:
+
+```sh
+python main_msa.py --vote
+```
+
 
 ## Examples
 - [Provide examples or screenshots of the output/results]
