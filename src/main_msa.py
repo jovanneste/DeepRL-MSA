@@ -49,7 +49,7 @@ def main(sequences, n, l, training, marl, voting):
     if voting:
         print("LOADiNG VOTING MODEL....")
         agents = [Agent(n,l), Agent(n,l,1e-5), Agent(n,l,1e-5), Agent(n,l,1e-2), Agent(n,l)]
-        for i in tqdm.tqdm(range(10)):
+        for i in tqdm.tqdm(range(1000)):
             timesteps = agents[0].total_timesteps
             timee = time.time()
             ep_return = environment.play_voting_episode(agents, sequences)
