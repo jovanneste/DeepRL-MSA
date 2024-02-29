@@ -9,7 +9,7 @@ import numpy as np
 from pairwise_layer import PairwiseConv1D
 
 class Agent():
-    def __init__(self, no_seq, length):
+    def __init__(self, no_seq, length, lr=1e-4):
         self.memory = Memory(1000)
         self.no_sequences = no_seq
         self.seq_length = length
@@ -17,7 +17,7 @@ class Agent():
         self.epsilon_min = 0.1
         self.epsilon_decay = 0.95/1000
         self.gamma = 0.99
-        self.learning_rate = 1e-4
+        self.learning_rate = lr
 #        old model does not contain new layer
         self.model = self._build_old_model()
         self.model_target = clone_model(self.model)
@@ -32,17 +32,11 @@ class Agent():
         model.add(Input((self.no_sequences, self.seq_length, 1)))
         
         model.add(PairwiseConv1D(filters=8, kernel_size=5))
-        
         model.add(Conv1D(filters=32, kernel_size=3, activation='LeakyReLU', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        
         model.add(Conv1D(filters=64, kernel_size=2, activation='LeakyReLU', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        
         model.add(MaxPooling2D(pool_size=(2, 2)))
-        
         model.add(Conv1D(filters=self.no_sequences*self.seq_length, kernel_size=1, activation='LeakyReLU', padding='same', kernel_initializer=tf.keras.initializers.VarianceScaling(scale=2)))
-        
         model.add(GlobalAveragePooling2D())
-            
         
         optimizer = Adam(learning_rate=self.learning_rate)
         model.compile(optimizer, loss=tf.keras.losses.Huber())
