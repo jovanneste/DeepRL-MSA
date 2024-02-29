@@ -37,7 +37,6 @@ def take_step_vote(agents):
     action_counts = Counter(actions)
     max_action = max(action_counts, key=action_counts.get)
     next_action = max_action
-    print("Chosen action, " + str(next_action))
 
     for a in agents:
         a.memory.store_experience(next_state, next_action, reward)
