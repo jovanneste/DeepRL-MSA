@@ -31,7 +31,7 @@ def take_step_vote(agents):
         for i, agent in enumerate(agents):
             agent.model.save_weights(f'agents/recent_weights{i}.hdf5')
 
-    next_state, reward, done = agent[0].step(agent[0].memory.states[-1], agent[0].memory.actions[-1])
+    next_state, reward, done = agents[0].step(agents[0].memory.states[-1], agents[0].memory.actions[-1])
 
     actions = [agent.get_action(next_state) for agent in agents]
     action_counts = Counter(actions)
@@ -45,9 +45,9 @@ def take_step_vote(agents):
     if done:
         return (score+reward), True
 
-    if len(agent[0].memory) > agent[0].memory_threshold:
+    if len(agents[0].memory) > agents[0].memory_threshold:
         for a in agents:
-            agent.learn()
+            a.learn()
         return (score+reward), True
 
     return (score+reward), False
