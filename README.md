@@ -40,7 +40,7 @@ python main_msa.py --multi
 ```
 
 ### Ensemble 
-Run the multi-agent solution:
+Run the voting solution:
 
 ```sh
 python main_msa.py --vote
