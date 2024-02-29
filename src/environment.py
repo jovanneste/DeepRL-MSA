@@ -22,6 +22,27 @@ def take_step_sarl(agent):
         return (score+reward), True
 
     return (score+reward), False
+
+
+def take_step_vote(agents):
+    agents[0].total_timesteps += 1
+    if agents[0].total_timesteps % 100 == 0:
+        for i, agent in enumerate(agents):
+            agent.model.save_weights(f'agents/recent_weights{i}.hdf5')
+
+    next_state, reward, done = agent.step(agent.memory.states[-1], agent.memory.actions[-1])
+    next_action = agent.get_action(next_state)
+    agent.memory.store_experience(next_state, next_action, reward)
+
+    if done:
+        return (score+reward), True
+
+    if len(agent.memory) > agent.memory_threshold:
+        agent.learn()
+        return (score+reward), True
+
+    return (score+reward), False
+
     
 def take_step_marl(white_agent, black_agent):
     white_agent.total_timesteps += 1
