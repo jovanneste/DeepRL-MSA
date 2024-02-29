@@ -48,7 +48,7 @@ def main(sequences, n, l, training, marl, voting):
     #-----------------------------------------------------------------
     if voting:
         print("LOADiNG VOTING MODEL....")
-        agents = [WhiteAgent(n,l), WhiteAgent(n,l), WhiteAgent(n,l), WhiteAgent(n,l), WhiteAgent(n,l)]
+        agents = [Agent(n,l), Agent(n,l), Agent(n,l), Agent(n,l), Agent(n,l)]
         for i in tqdm.tqdm(range(10)):
             timesteps = agents[0].total_timesteps
             timee = time.time()

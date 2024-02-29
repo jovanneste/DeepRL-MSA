@@ -1,4 +1,5 @@
 import numpy as np
+from collections import Counter
 
 def initialise_new_game(agents, state):
     for agent in agents:
@@ -30,15 +31,23 @@ def take_step_vote(agents):
         for i, agent in enumerate(agents):
             agent.model.save_weights(f'agents/recent_weights{i}.hdf5')
 
-    next_state, reward, done = agent.step(agent.memory.states[-1], agent.memory.actions[-1])
-    next_action = agent.get_action(next_state)
-    agent.memory.store_experience(next_state, next_action, reward)
+    next_state, reward, done = agent[0].step(agent[0].memory.states[-1], agent[0].memory.actions[-1])
+
+    actions = [agent.get_action(next_state) for agent in agents]
+    action_counts = Counter(actions)
+    max_action = max(action_counts, key=action_counts.get)
+    next_action = max_action
+    print("Chosen action, " + str(next_action))
+
+    for a in agents:
+        a.memory.store_experience(next_state, next_action, reward)
 
     if done:
         return (score+reward), True
 
-    if len(agent.memory) > agent.memory_threshold:
-        agent.learn()
+    if len(agent[0].memory) > agent[0].memory_threshold:
+        for a in agents:
+            agent.learn()
         return (score+reward), True
 
     return (score+reward), False
