@@ -76,3 +76,13 @@ def play_marl_episode(white_agent, black_agent, sequences):
             break
     return score
     
+def play_voting_episode(agents, sequences):
+    global score
+    score = 0
+    initialise_new_game(agents, sequences)
+    done = False
+    while True:
+        score, done = take_step_vote(agents)
+        if done:
+            break
+    return score

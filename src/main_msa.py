@@ -12,7 +12,7 @@ import timeit
 import argparse
 
 
-def main(sequences, n, l, training, marl):
+def main(sequences, n, l, training, marl, voting):
     dqn_agent = Agent(n, l)
     scores, average_returns = [], []
     
@@ -43,8 +43,33 @@ def main(sequences, n, l, training, marl):
         plt.show()
         return scores
     #-----------------------------------------------------------------
-    
-    
+
+    #for voting solution 
+    #-----------------------------------------------------------------
+    if voting:
+        print("LOADiNG VOTING MODEL....")
+        agents = [WhiteAgent(n,l), WhiteAgent(n,l), WhiteAgent(n,l), WhiteAgent(n,l), WhiteAgent(n,l)]
+        for i in tqdm.tqdm(range(10)):
+            timesteps = agents[0].total_timesteps
+            timee = time.time()
+            ep_return = environment.play_voting_episode(agents, sequences)
+            scores.append(ep_return)
+            average_returns.append(ep_return/agents[0].memory_threshold)
+
+            if i%100==0:  
+                print('\nEpisode: ' + str(i))
+                print('Steps: ' + str(agents[0].total_timesteps - timesteps))
+                print('Duration: ' + str(time.time() - timee))
+                print('Score: ' + str(ep_return))
+                print('Average return of action: ' + str(ep_return/agents[0].memory_threshold))
+                print('Epsilon: ' + str(agents[0].epsilon))
+                
+        plt.plot(scores)
+        plt.xlabel('Episode')
+        plt.ylabel('Average reward')
+        plt.show()
+        return scores
+    #-----------------------------------------------------------------
     
     print("LOADING SARL SOLUTION.....")
     if training:
@@ -115,6 +140,7 @@ def main(sequences, n, l, training, marl):
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description='Run SARL or MARL solution with the --multi flag.')
     parser.add_argument('--multi', dest='multi', action='store_true', help='Run multi-agent (MARL) solution.')
+    parser.add_argument('--vote', dest='vote', action='store_true', help='Use ensemble voting model.')
     parser.add_argument('--train', dest='train', action='store_true', help='Train RL model.')
     args = parser.parse_args()
 
@@ -123,6 +149,6 @@ if __name__=='__main__':
     a = 4
 
     sequences = seq_generator.generate(n,l,a,0.2,0.2)
-    execution_time = timeit.timeit(lambda: main(sequences, n, l, args.train, args.multi), number=1)
+    execution_time = timeit.timeit(lambda: main(sequences, n, l, args.train, args.multi, args.vote), number=1)
     print("Execution time:", execution_time, "seconds")
 
