@@ -5,6 +5,7 @@ sys.path.append('../src')
 from single_agent.agent import Agent
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import OneHotEncoder
 from matplotlib.colors import LinearSegmentedColormap
 
 dqn_agent = Agent(10, 15)
@@ -25,6 +26,8 @@ state = np.asarray([[20, 7, 7, 1, 20, 3, 1, 3, 20, 20, 3, 1, 1, 1, 3],
  [20, 7, 7, 1, 20, 3, 3, 7, 20, 3, 1, 3, 3, 0, 0]])
 
 print(state.shape)
+encoder = OneHotEncoder()
+state = encoder.fit_transform(state.reshape(-1, 1)).toarray()
 
 input_data = state.reshape((1,10,15,1))
 action = np.argmax(dqn_agent.model.predict(input_data))
@@ -40,25 +43,3 @@ for i in [1,2,action]:
     cbar.set_label('Attention Level')
 
     plt.show()
-#    # Plot the state and GradCAM heatmap overlay
-#    fig, ax = plt.subplots(figsize=(8, 8))
-#
-#    # Plot the state array
-#    ax.imshow(state, cmap='viridis')  # Adjust the colormap as needed
-#
-#    # Overlay the GradCAM heatmap with numbers
-#    masked_array = np.ma.masked_where(grid < grid.max(), grid)
-#    im = ax.imshow(masked_array, alpha=0.5, cmap='coolwarm')  # Adjust the colormap and transparency as needed
-#
-#    # Display numbers from the state array on the plot
-#    for i in range(state.shape[0]):
-#        for j in range(state.shape[1]):
-#            ax.text(j, i, state[i, j], ha='center', va='center', color='black')
-#
-#    # Add a color bar
-#    cbar = plt.colorbar(im, ax=ax)
-#    cbar.set_label('Attention Level')
-#
-#    plt.title('State with GradCAM Heatmap Overlay')
-#    plt.show()
-#    

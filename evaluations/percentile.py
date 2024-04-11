@@ -97,15 +97,3 @@ def get_model_action_percentiles(s, n_steps, random_actions):
         
     return model_percentiles
 
-    
-state = np.asarray([[ 7 , 7 ,20  ,7 ,20 , 7],
- [ 7, 20,  3, 20,  0,  0],
- [ 7, 20, 20,  0,  0,  0],
- [ 7, 20 , 7 ,20 , 0 , 0],
- [ 7,  7, 20 , 7 , 7 , 0],
- [ 7, 20,  7 ,20 , 0 , 0]])
-
-
-
-#model_percentiles = get_model_action_percentiles(state, 100, False)
-#print(model_percentiles)
