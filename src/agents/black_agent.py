@@ -79,6 +79,11 @@ class BlackAgent():
             return (np.random.randint(0, self.seq_length), np.random.randint(0, self.no_sequences))
         
         action_values = self.model.predict(state.reshape(1,self.no_sequences,self.seq_length,1))
+        
+        even_column_indices = [i for i in range(len(action_values[0])) if i % 2 == 0]
+        even_column_values = action_values[0][even_column_indices]
+        #updated moves locally
+
         print("Black move: ", self.index_to_coords(np.argmax(action_values)))
         return self.index_to_coords(np.argmax(action_values))
     

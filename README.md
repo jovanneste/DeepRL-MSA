@@ -47,10 +47,6 @@ python main_msa.py --vote
 ```
 
 
-## Examples
-- [Provide examples or screenshots of the output/results]
-
-
 ## Contact
 - Author: [Joachim Vanneste](https://github.com/jovanneste)
 - Email: joachimvanneste1@gmail.com
