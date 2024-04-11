@@ -1,3 +1,9 @@
+"""
+Author: Joachim Vanneste
+Date: 10 Apr 2024
+Description: Memory buffer class
+"""
+
 from collections import deque
 import random 
 

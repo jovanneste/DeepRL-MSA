@@ -1,3 +1,9 @@
+"""
+Author: Joachim Vanneste
+Date: 10 Apr 2024
+Description: Sequence generation method for alignment matrices
+"""
+
 import random
 import numpy as np
 

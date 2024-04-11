@@ -41,5 +41,4 @@ for i in [1,2,action]:
     plt.imshow(grid, cmap='viridis')
     cbar = plt.colorbar()
     cbar.set_label('Attention Level')
-
     plt.show()

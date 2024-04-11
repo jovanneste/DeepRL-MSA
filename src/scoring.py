@@ -1,3 +1,9 @@
+"""
+Author: Joachim Vanneste
+Date: 10 Apr 2024
+Description: All scoring functions excluding substitution matrix methods
+"""
+
 import numpy as np
 import math
 

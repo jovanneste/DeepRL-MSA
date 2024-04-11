@@ -1,3 +1,9 @@
+"""
+Author: Joachim Vanneste
+Date: 10 Apr 2024
+Description: Main method to launch MSA solver
+"""
+
 from agents.single_agent import Agent
 from agents.white_agent import WhiteAgent
 from agents.black_agent import BlackAgent

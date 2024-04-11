@@ -1,3 +1,9 @@
+"""
+Author: Joachim Vanneste
+Date: 10 Apr 2024
+Description: Reinforcement learning environment for all agents 
+"""
+
 import numpy as np
 from collections import Counter
 

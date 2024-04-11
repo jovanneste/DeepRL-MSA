@@ -1,3 +1,9 @@
+"""
+Author: Joachim Vanneste
+Date: 10 Apr 2024
+Description: Novel pairwise layer
+"""
+
 import tensorflow as tf
 import numpy as np
 

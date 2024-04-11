@@ -1,3 +1,9 @@
+"""
+Author: Joachim Vanneste
+Date: 10 Apr 2024
+Description: Single-agent RL solution to MSA
+"""
+
 from agents.agent_memory import Memory
 import scoring
 from tensorflow.keras.models import Sequential, clone_model

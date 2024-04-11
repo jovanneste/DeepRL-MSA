@@ -22,3 +22,4 @@ def percentage_greater_than(lst, x):
 
 with open('oldmodel/10x10percentiles.pkl', 'rb') as file:
     scores = pickle.load(file)
+    #plotted in Jupyter notebook
