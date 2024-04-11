@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 
 class PairwiseConv1D(tf.keras.layers.Layer):
     def __init__(self, filters, kernel_size, **kwargs):
@@ -32,3 +33,20 @@ class PairwiseConv1D(tf.keras.layers.Layer):
             "kernel_size": self.kernel_size,
         })
         return config
+
+
+if __name__ == '__main__':
+    print("yep")
+    pairwise_conv_layer = PairwiseConv1D(filters=2, kernel_size=2)
+
+    # Example input matrix
+    input_matrix = np.array([[[1, 2], [3, 4], [5, 6], [7, 8]]], dtype=np.float32)
+    input_tensor = tf.constant(input_matrix)
+
+    # Reshape input tensor to add channel dimension
+    input_tensor = tf.expand_dims(input_tensor, axis=-1)
+
+    # Apply the pairwise_conv_layer to the input
+    output_tensor = pairwise_conv_layer(input_tensor)
+
+    print(output_tensor)
