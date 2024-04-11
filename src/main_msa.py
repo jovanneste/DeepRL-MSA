@@ -5,6 +5,7 @@ import seq_generator
 import environment
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import OneHotEncoder
 import time
 import os 
 import tqdm
@@ -147,8 +148,10 @@ if __name__=='__main__':
     n = 5
     l = 5
     a = 4
-
+    
+    encoder = OneHotEncoder()
     sequences = seq_generator.generate(n,l,a,0.2,0.2)
+    sequences = encoder.fit_transform(sequences.reshape(-1, 1)).toarray()
     execution_time = timeit.timeit(lambda: main(sequences, n, l, args.train, args.multi, args.vote), number=1)
     print("Execution time:", execution_time, "seconds")
 
